@@ -8,7 +8,7 @@ DOTFILES=../
 
 echo "~> Linking..."
 
-FILES=$(ls -A $DOTFILES | grep -v install | xargs -n1 -IF echo $(pwd)/../F)
+FILES=$(ls -A $DOTFILES | grep -v 'install\|\.git' | xargs -n1 -IF echo $(pwd)/../F)
 for f in $FILES
 do
     if ln -s $f ~/ 2>/dev/null; then
