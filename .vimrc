@@ -1,3 +1,17 @@
+set nocompatible
+filetype off " required by Vundle (?)
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'tpope/vim-surround'
+    Plugin 'tpope/vim-repeat'
+    Plugin 'vim-scripts/matchit.zip'
+    Plugin 'kien/ctrlp.vim'
+    Plugin 'bling/vim-airline'
+call vundle#end()
+filetype plugin indent on
+
 syntax on                         " show syntax highlighting
 filetype plugin indent on
 set autoindent                    " set auto indent
@@ -14,7 +28,7 @@ set smartcase                     " pay attention to case when caps are used
 set incsearch                     " show search results as I type
 set mouse=a                       " enable mouse support
 set ttimeoutlen=100               " decrease timeout for faster insert with 'O'
-set vb                            " enable visual bell (disable audio bell)
+set visualbell                    " enable visual bell (disable audio bell)
 set ruler                         " show row and column in footer
 set scrolloff=2                   " minimum lines above/below cursor
 set laststatus=2                  " always show status bar
@@ -27,6 +41,17 @@ runtime macros/matchit.vim        " use % to jump between start/end of methods
 " set dark background and color scheme
 set background=dark
 colorscheme slate
+
+" slim cursor in insert mode (iTerm2 OS X)
+if exists('$ITERM_PROFILE')
+    if exists('$TMUX')
+        let &t_SI = "\<Esc>[3 q"
+        let &t_EI = "\<Esc>[0 q"
+    else
+        let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+        let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+    endif
+end
 
 " set up some custom colors
 highlight clear SignColumn
@@ -118,3 +143,10 @@ function! RenameFile()
   endif
 endfunction
 map <leader>n :call RenameFile()<cr>
+
+
+" disable arrow keys (hard mode!)
+"noremap <Up> <NOP>
+"noremap <Down> <NOP>
+"noremap <Left> <NOP>
+"noremap <Right> <NOP>
