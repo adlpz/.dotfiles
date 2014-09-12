@@ -9,6 +9,8 @@ call vundle#begin()
     Plugin 'vim-scripts/matchit.zip'
     Plugin 'kien/ctrlp.vim'
     Plugin 'bling/vim-airline'
+    Plugin 'tpope/vim-fireplace'
+    Plugin 'terryma/vim-multiple-cursors'
 call vundle#end()
 filetype plugin indent on
 
