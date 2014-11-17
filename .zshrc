@@ -15,10 +15,10 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 # Path
-export PATH="/Users/adria/tools/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/usr/local/mysql-5.5.28-osx10.6-x86_64/bin/:/usr/local/Cellar/php54/5.4.9/bin/"
+export PATH="/Users/adria/tools/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/usr/local/mysql-5.5.28-osx10.6-x86_64/bin:/usr/local/Cellar/php54/5.4.9/bin"
 
 # $EDITOR
-EDITOR="vim"
+export EDITOR=$(which vim)
 
 # vim mode
 bindkey -v
@@ -93,3 +93,6 @@ zstyle ':completion:*' squeeze-slashes true
 
 # Sudo completion
 zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin /usr/X11R6/bin
+
+# fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

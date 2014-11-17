@@ -1,7 +1,7 @@
 set nocompatible
 filetype off " required by Vundle (?)
 " set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/vundle/Vundle.vim
 call vundle#begin()
     Plugin 'gmarik/Vundle.vim'
     Plugin 'tpope/vim-surround'
@@ -11,6 +11,7 @@ call vundle#begin()
     Plugin 'bling/vim-airline'
     Plugin 'tpope/vim-fireplace'
     Plugin 'terryma/vim-multiple-cursors'
+    Plugin 'ardagnir/vimbed'
 call vundle#end()
 filetype plugin indent on
 
