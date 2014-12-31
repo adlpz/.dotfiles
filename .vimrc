@@ -15,6 +15,12 @@ call vundle#begin()
 call vundle#end()
 filetype plugin indent on
 
+" do not move back on ESC!
+
+autocmd InsertEnter * let CursorColumnI = col('.')
+autocmd CursorMovedI * let CursorColumnI = col('.')
+autocmd InsertLeave * if col('.') != CursorColumnI | call cursor(0, col('.')+1) | endif
+
 syntax on                         " show syntax highlighting
 filetype plugin indent on
 set autoindent                    " set auto indent
