@@ -4,6 +4,12 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
+CUSTOM_ZSH=$HOME/.zsh
+source $CUSTOM_ZSH/*
+
+# Banner
+_print_zsh_banner()
+
 # Custom prompt
 PROMPT=$'%{$fg_bold[blue]%}$(parse_git_dirty)$(git_prompt_info)%{$fg_bold[blue]%}%{$fg[white]%}%c%{$fg_bold[cyan]%} %#%{$reset_color%} '
 INITIAL_RPROMPT=$'[%{\e[0;31m%}%n%{\e[0;37m%}@%{\e[0;32m%}%m%{\e[0m%}]'
@@ -42,10 +48,20 @@ zle -N zle-keymap-select
 # Homebrew
 export HOMEBREW_GITHUB_API_TOKEN="6d172fc6b90506f5e375654e21aa7482e685f46b"
 
+# Vagrant
+vagrant_up_and_ssh() {
+    vagrant status | sed -n 3p | grep -q running > /dev/null
+    if [ $? -eq 1 ]; then
+        vagrant up
+    fi
+    vagrant ssh
+}
+
 # Aliases
 alias ls='ls -G'
 alias l='ls -l'
 alias v="vagrant"
+alias vssh="vagrant_up_and_ssh"
 
 # History
 HISTFILE=~/.zsh_history
@@ -96,3 +112,5 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"

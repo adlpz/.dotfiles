@@ -10,13 +10,49 @@
   "Install given PACKAGE."
   (unless (package-installed-p package)
     (unless (assoc package package-archive-contents)
-      (package-refresh-contents))
+      (package-refrercsh-contents))
     (package-install package)))
+
+(load-file "~/.private.el")
+
+
+;; projectile
+
+(projectile-global-mode)
+(setq projectile-require-project-root nil)
 
 ;; evil
 (require 'evil)
 (evil-mode 1)
 (setq evil-move-cursor-back nil) ;; do not move back on ESC
+(setq evil-esc-delay 0)
+
+(global-evil-leader-mode)
+(evil-leader/set-leader ",")
+(evil-leader/set-key
+  "." 'find-tag
+  "ag" 'projectile-ag
+  "t" 'projectile-find-file
+  "b" 'ido-switch-buffer
+  "cc" 'evilnc-comment-or-uncomment-lines
+  "," 'switch-to-previous-buffer
+  "w"  'kill-buffer
+  "nn" 'neotree-toggle
+  "nf" 'neotree-find
+  "gk" 'windmove-up
+  "gj" 'windmove-down
+  "gl" 'windmove-right
+  "gh" 'windmove-left
+  "vs" 'split-window-right
+  "hs" 'split-window-below
+  "x" 'smex)
+
+(global-evil-surround-mode t)
+
+;; autocomplete
+(require 'auto-complete)
+(global-auto-complete-mode t)
+
 
 ;; ui changes
 (setq ring-bell-function 'ignore) ;; disable bell
@@ -34,7 +70,7 @@
 (setq evil-operator-state-cursor '("red" hollow))
 
 ;; theme
-(load-theme 'hipster t)
+(load-theme 'ujelly t)
 
 ;; highlight current line
 (global-hl-line-mode 1)
@@ -130,8 +166,25 @@
 (add-hook 'prog-mode-hook 'line-number-mode t)
 (add-hook 'prog-mode-hook 'column-number-mode t)
 
+;; disable backup files
+(setq make-backup-files nil)
+
 ;; save desktop by default
 ;; (desktop-save-mode 1)
+
+;; smex
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;; flx
+(setq ido-decorations (quote ("\n↪ "     "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
+(require 'flx-ido)
+(ido-mode 1)
+(ido-everywhere 1)
+(flx-ido-mode 1)
+
 
 ;; enable ERC irc client
 (require 'erc)
@@ -140,8 +193,40 @@
                               (set (make-local-variable 'scroll-conservatively) 101)
                               (set (make-local-variable 'scroll-margin) 0)))
 
+(setq erc-nick "adlpz")
+
+(setq circe-network-options
+      `(("Freenode"
+         :nick "adlpz"
+         :channels ("#emacs")
+         :nickserv-password ,freenode-password
+         )))
+
 ;; colorize nicks
 (require 'erc-hl-nicks)
+
+;; neotree
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+;; smartparens
+(require 'smartparens-config)
+
+(define-key sp-keymap (kbd "C-<right>") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "C-<left>") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
+(define-key sp-keymap (kbd "C-<backspace>") 'sp-unwrap-sexp)
+
+;; evil-smartparens
+(add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+
+;; recognise cljs files as clojure
+(setq auto-mode-alist (cons '("\\.cljs" . clojure-mode) auto-mode-alist))
+
+(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+
 
 ;; helm
 ;(require 'helm-config)
@@ -153,7 +238,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("ed5af4af1d148dc4e0e79e4215c85e7ed21488d63303ddde27880ea91112b07e" "f0a99f53cbf7b004ba0c1760aa14fd70f2eabafe4e62a2b3cf5cabae8203113b" "a507b9ca4a605d5256716da70961741b9ef9ec3246041a4eb776102e8df18418" default))))
+    ("0f6e58d1814b4138c5a88241f96547d35883cbb3df6cf9ec8ef44856ece04c13" "ed5af4af1d148dc4e0e79e4215c85e7ed21488d63303ddde27880ea91112b07e" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
