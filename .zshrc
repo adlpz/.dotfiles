@@ -8,7 +8,7 @@ CUSTOM_ZSH=$HOME/.zsh
 source $CUSTOM_ZSH/*
 
 # Banner
-_print_zsh_banner()
+_print_zsh_banner
 
 # Custom prompt
 PROMPT=$'%{$fg_bold[blue]%}$(parse_git_dirty)$(git_prompt_info)%{$fg_bold[blue]%}%{$fg[white]%}%c%{$fg_bold[cyan]%} %#%{$reset_color%} '

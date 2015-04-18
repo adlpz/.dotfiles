@@ -1,20 +1,5 @@
-;; packages
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "http://orgmode.org/elpa/")
-;;                       ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
-(package-initialize)
-
-(defun require-package (package)
-  (setq-default highlight-tabs t)
-  "Install given PACKAGE."
-  (unless (package-installed-p package)
-    (unless (assoc package package-archive-contents)
-      (package-refrercsh-contents))
-    (package-install package)))
-
+(load-file "~/.emacs.d/init/packages.el")
 (load-file "~/.private.el")
-
 
 ;; projectile
 
@@ -82,7 +67,7 @@
 (setq-default tab-width 4 indent-tabs-mode nil)
 (define-key global-map (kbd "RET") 'newline-and-indent)
 
-; remember position on reopen file
+                                        ; remember position on reopen file
 (setq save-place-file "~/.emacs.d/saveplace")
 (setq-default save-place t)
 (require 'saveplace)
@@ -100,6 +85,7 @@
                           (mode-line (if active 'mode-line 'mode-line-inactive))
                           (face1 (if active 'powerline-active1 'powerline-inactive1))
                           (face2 (if active 'powerline-active2 'powerline-inactive2))
+                          (face3 (if active 'powerline-active3 'powerline-inactive3))
                           (separator-left (intern (format "powerline-%s-%s"
                                                           powerline-default-separator
                                                           (car powerline-default-separator-dir))))
@@ -110,17 +96,20 @@
                                        (if evil-mode
                                            (powerline-raw (powerline-evil-tag) evil-face)))
                                      (powerline-buffer-id `(mode-line-buffer-id ,mode-line) 'l)
-                                     (funcall separator-right mode-line face1)
+                                     (powerline-raw " " mode-line)
+                                     (funcall separator-left mode-line face1)
                                      (powerline-raw " " face1)
                                      (powerline-major-mode face1)
                                      (powerline-process face1)
                                      (powerline-raw " " face1)
                                      (funcall separator-left face1 face2)
+                                     (powerline-raw " " face2)
                                      (when (buffer-modified-p)
                                        (powerline-raw "+" face2))
                                      (when buffer-read-only
                                        (powerline-raw "RO" face2))
                                      (powerline-raw "%z" face2)
+                                     (powerline-raw " " face2)
                                      (funcall separator-left face2 mode-line)
                                      (powerline-raw " " mode-line)
                                      ;; (powerline-raw (concat "[" (mode-line-eol-desc) "]") mode-line)
@@ -129,29 +118,35 @@
                                      (when (boundp 'erc-modified-channels-object)
                                        (powerline-raw erc-modified-channels-object face1 'l))
                                      (powerline-minor-modes mode-line)
-                                     (powerline-raw "%n " mode-line)
+                                     (powerline-raw "%n " mode-line)))
+                          (rhs (list (powerline-raw "%I")
+                                     (powerline-raw global-mode-string mode-line 'r)
+                                     (powerline-raw "%l-" mode-line 'l)
+                                     (powerline-raw "%c ")
+                                     (powerline-raw (replace-regexp-in-string  "%" "%%" (format-mode-line '(-3 "%p"))) mode-line 'r)
                                      (when (and vc-mode buffer-file-name)
                                        (let ((backend (vc-backend buffer-file-name)))
                                          (when backend
-                                           (concat (powerline-raw "[" mode-line 'l)
-                                                   (powerline-raw (format "%s / %s" backend (vc-working-revision buffer-file-name backend)))
-                                                   (powerline-raw "]" mode-line)))))))
-                          (rhs (list (powerline-raw '(10 "%i"))
-                                     (powerline-raw global-mode-string mode-line 'r)
-                                     (powerline-raw "%l," mode-line 'l)
-                                     (powerline-raw (format-mode-line '(10 "%c")))
-                                     (powerline-raw (replace-regexp-in-string  "%" "%%" (format-mode-line '(-3 "%p"))) mode-line 'r))))
+                                           (powerline-raw (format " %s " (vc-working-revision buffer-file-name backend)) face3))))
+                                     (let ((projectile-project (projectile-project-root)))
+                                       (when projectile-project
+                                         (powerline-raw (format " %s " projectile-project) face2))))))
                      (concat (powerline-render lhs)
                              (powerline-fill mode-line (powerline-width rhs))
                              (powerline-render rhs)))))))
 
-(set-face-attribute 'powerline-active1 nil :background "#1179BA" :foreground "#ffffff" :box nil)
+(set-face-attribute 'powerline-active1 nil :background "#3A419A" :foreground "#ffffff" :box nil)
 (set-face-attribute 'powerline-inactive1 nil :box nil)
-(set-face-attribute 'powerline-active2 nil :background "#E37F2D" :foreground "#ffffff" :box nil)
+(set-face-attribute 'powerline-active2 nil :background "#B3327B" :foreground "#ffffff" :box nil)
 (set-face-attribute 'powerline-inactive2 nil :box nil)
-(set-face-attribute 'mode-line nil :box nil)
+(copy-face 'powerline-active1 'powerline-active3)
+(copy-face 'powerline-inactive1 'powerline-inactive3)
+(set-face-attribute 'powerline-active3 nil :background "#DFB43E" :foreground "#000000" :box nil)
+(set-face-attribute 'powerline-inactive3 nil :box nil)
+(set-face-attribute 'mode-line nil :background "#1a1a1a" :box nil)
 (set-face-attribute 'mode-line-inactive nil :box nil)
 (set-face-attribute 'mode-line-highlight nil)
+(setq powerline-default-separator nil)
 (powerline-custom-theme)
 
 ;; smoother scrolling
@@ -185,7 +180,6 @@
 (ido-everywhere 1)
 (flx-ido-mode 1)
 
-
 ;; enable ERC irc client
 (require 'erc)
 
@@ -212,11 +206,16 @@
 ;; smartparens
 (require 'smartparens-config)
 
-(define-key sp-keymap (kbd "C-<right>") 'sp-forward-slurp-sexp)
-(define-key sp-keymap (kbd "C-<left>") 'sp-forward-barf-sexp)
-(define-key sp-keymap (kbd "C-M-<left>") 'sp-backward-slurp-sexp)
-(define-key sp-keymap (kbd "C-M-<right>") 'sp-backward-barf-sexp)
+(define-key sp-keymap (kbd "C-l") 'sp-forward-sexp)
+(define-key sp-keymap (kbd "C-j") 'sp-backward-sexp)
+(define-key sp-keymap (kbd "C-k") 'sp-up-sexp)
+(define-key sp-keymap (kbd "C-j") 'sp-down-sexp)
+(define-key sp-keymap (kbd "C-s-k") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "C-s-h") 'sp-forward-barf-sexp)
+(define-key sp-keymap (kbd "C-M-s-h") 'sp-backward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-s-l") 'sp-backward-barf-sexp)
 (define-key sp-keymap (kbd "C-<backspace>") 'sp-unwrap-sexp)
+
 
 ;; evil-smartparens
 (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
@@ -225,12 +224,17 @@
 (setq auto-mode-alist (cons '("\\.cljs" . clojure-mode) auto-mode-alist))
 
 (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'clojure-mode-hook #'highlight-parentheses-mode)
+(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
 
+;; lisp
+(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+(add-hook 'emacs-lisp-mode-hook #'highlight-parentheses-mode)
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
 ;; helm
-;(require 'helm-config)
-;(helm-mode 1)
+                                        ;(require 'helm-config)
+                                        ;(helm-mode 1)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
