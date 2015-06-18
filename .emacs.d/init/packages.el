@@ -1,71 +1,37 @@
 ;; packages
 (setq package-list
-      '(auto-complete
-        aggressive-indent
-        popup
-        cider
-        queue
-        pkg-info
-        epl
-        dash
-        clojure-mode
-        circe
-        lcs
-        lui
-        tracking
-        shorten
-        clojure-mode
-        csv-mode
-        erc-hl-nicks
-        evil-leader
-        evil
-        goto-chg
-        undo-tree
-        evil
-        goto-chg
-        undo-tree
-        evil-smartparens
-        smartparens
-        dash
-        evil
-        goto-chg
-        undo-tree
-        evil-surround
-        flx-ido
-        flx
-        goto-last-change
-        helm
-        async
-        highlight-parentheses
-        lcs
-        lui
-        tracking
-        shorten
-        names
-        neotree
-        paredit
-        popup
-        powerline-evil
-        powerline
-        evil
-        goto-chg
-        undo-tree
-        projectile
-        pkg-info
-        epl
-        dash
-        queue
-        rainbow-delimiters
-        relative-line-numbers
-        smartparens
-        dash
-        smex
-        tracking
-        shorten
-        ujelly-theme
-        undo-tree
-        writeroom-mode
-        visual-fill-column))
+      '(auto-complete ;; autocompletion
+        popup ;; popup for autocompletion and others
+        cider ;; clojure interactive tools
+        clojure-mode ;; clojure mode
+        circe ;; irc client
+        csv-mode ;; csv mode
+        erc-hl-nicks ;; colorful nicks in erc
+        evil-leader ;; leader key in evil
+        evil ;; vim emulation
+        undo-tree ;; undo is a tree
+        evil-smartparens ;; smartparens in evil mode
+        smartparens ;; smart parentheses
+        evil-surround ;; surround from vim in evil
+        flx-ido ;; fuzzy something
+        helm ;; incremental search framework
+        highlight-parentheses ;; highlight matching parens in lisps
+        neotree ;; vim's nerdtree port
+        paredit ;; editing sexprs
+        evil-paredit ;; paredit in vim mode
+        powerline-evil ;; evil mode in powerline
+        powerline ;; cool modeline
+        projectile ;; project management
+        relative-line-numbers ;; line number relative to current
+        smex ;; m-x fuzzy search
+        ujelly-theme ;; cool theme
+        writeroom-mode ;; whiteroom no-distraction mode
+        visual-fill-column ;; wrap on same-width columns
+        multiple-cursors ;; multiple cursors!!
+        guide-key ;; show next possible key combos to press
+        package-utils ;; utils for package management
+        ;; disabled: messess up with namespaces: aggressive-indent ;; indents whole blocks and keeps all nice
+        ))
 
 ;; sources
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -84,14 +50,29 @@
     (if (y-or-n-p (format "Package %s is missing. Install it? " package))
         (package-install package))))
 
+;; lifted from emacs 25
+(defun package--find-non-dependencies ()
+  "Return a list of installed packages which are not dependencies.
+Finds all packages in `package-alist' which are not dependencies
+of any other packages.
+Used to populate `package-selected-packages'."
+  (let ((dep-list
+         (delete-dups
+          (apply #'append
+            (mapcar (lambda (p) (mapcar #'car (package-desc-reqs (cadr p))))
+                    package-alist)))))
+    (cl-loop for p in package-alist
+             for name = (car p)
+             unless (memq name dep-list)
+             collect name)))
+
 ;; List packages not in the above list
 (defun untracked-packages ()
   (let ((filter (lambda (lst condp)
                   (delq nil
                         (mapcar (lambda (x) (and (funcall condp x) x)) lst)))))
-    
     (funcall filter
-     package-activated-list
+     (package--find-non-dependencies)
      (lambda (p)
        (not (member p package-list))))))
 
@@ -100,4 +81,4 @@
   (interactive)
   (dolist (package (untracked-packages))
     (if (y-or-n-p (format "Remove package %s?" package))
-      (package-delete package))))
+      (package-delete (cadr (assq package package-alist))))))
