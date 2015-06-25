@@ -8,3 +8,8 @@ auto-save-list/
 ac-comphist.dat
 url/
 .emacs.desktop
+places
+projectile-bookmarks.eld
+tramp
+.mc-lists.el
+
