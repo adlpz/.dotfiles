@@ -3,7 +3,6 @@
 
 (setq mc/cmds-to-run-for-all
       '(
-        cider-refresh
         evil-append-line
         evil-backward-WORD-begin
         evil-backward-char
@@ -31,6 +30,7 @@
         evil-inner-tag
         evil-mouse-drag-region
         evil-search-next
+        ns-paste-secondary
         save-buffers-kill-terminal
         sp-backward-delete-char
         ))

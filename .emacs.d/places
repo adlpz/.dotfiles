@@ -1,11 +1,11 @@
 ;;; -*- coding: utf-8 -*-
-(("/Users/adria/Projects/netdudes-countdown/src/netdudes_countdown/core.clj" . 2015)
- ("/Users/adria/Projects/test-clojure/src/test_clojure/core.clj" . 128)
- ("/Users/adria/.emacs.d/ido.last" . 16191)
- ("/Users/adria/Projects/netdudes-countdown/project.clj" . 325)
- ("/Users/adria/Documents/leave-berlin.org" . 712)
- ("/Users/adria/Downloads/PHPExcel_1.8.0_doc/Classes/PHPExcel/Reader/Excel5.php" . 241)
- ("/Users/adria/Documents/Scanning the 'waves with your TV card.html" . 24320)
+(("/Users/adria/.dotfiles/.emacs.d/init.el" . 425)
+ ("/Users/adria/.emacs.d/ido.last" . 18264)
+ ("/Users/adria/.dotfiles/.emacs.d/init/powerline.el" . 4058)
+ ("/Users/adria/KEEP-FROM-LAPTOP/Projects/netdudes-countdown/src/netdudes_countdown/core.clj" . 1854)
+ ("/Users/adria/.dotfiles/.emacs.d/init/packages.el" . 1124)
+ ("/Users/adria/SHIT-TO-DELETE.org" . 178)
+ ("/Users/adria/KEEP-FROM-LAPTOP/Documents/leave-berlin.org" . 120)
  (#("/scp:prealfa:/srv/www/poorcode/Posts/from-emacs.txt" 1 4
     (tramp-default t)
     14 17
@@ -19,9 +19,6 @@
     37 40
     (face flx-highlight-face))
   . 94)
- ("/Users/adria/.dotfiles/.emacs.d/init.el" . 138)
  ("/Users/adria/netdudes/hq/doc/testing.md" . 406)
  ("/Users/adria/netdudes/u2app-blackfire/vendor/fzaninotto/faker/src/Faker/Provider/sk_SK/Address.php" . 40)
- ("/Users/adria/.dotfiles/.emacs.d/init/packages.el" . 1084)
- ("/Users/adria/.dotfiles/.emacs.d/init/powerline.el" . 4058)
  ("/Users/adria/netdudes/hq/src/Netdudes/U2/CoreBundle/Controller/UnitController.php" . 26726))

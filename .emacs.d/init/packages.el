@@ -1,7 +1,6 @@
 ;; packages
 (setq package-list
-      '(auto-complete ;; autocompletion
-        popup ;; popup for autocompletion and others
+      '(popup ;; popup for autocompletion and others
         cider ;; clojure interactive tools
         clojure-mode ;; clojure mode
         circe ;; irc client
@@ -25,11 +24,13 @@
         relative-line-numbers ;; line number relative to current
         smex ;; m-x fuzzy search
         ujelly-theme ;; cool theme
+        base16-theme ;; nice, lotsa themes http://chriskempson.github.io/base16/
         writeroom-mode ;; whiteroom no-distraction mode
         visual-fill-column ;; wrap on same-width columns
         multiple-cursors ;; multiple cursors!!
         guide-key ;; show next possible key combos to press
         package-utils ;; utils for package management
+        company ;; autocomplete magic. Good for CIDER.
         ;; disabled: messess up with namespaces: aggressive-indent ;; indents whole blocks and keeps all nice
         ))
 

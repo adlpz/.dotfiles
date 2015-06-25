@@ -21,7 +21,6 @@
   "ag" 'projectile-ag
   "t" 'projectile-find-file
   "b" 'ido-switch-buffer
-  "cc" 'evilnc-comment-or-uncomment-lines
   "," 'switch-to-previous-buffer
   "w"  'kill-buffer
   "nn" 'neotree-toggle
