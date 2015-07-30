@@ -81,7 +81,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (global-hl-line-mode 1)
 
 ;; font
-(set-face-attribute 'default t :font "Consolas-13")
+;;(set-face-attribute 'default t :font "Consolas-13")
 
 ;; indentation
 (setq-default tab-width 4 indent-tabs-mode nil)
