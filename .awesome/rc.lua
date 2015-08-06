@@ -27,7 +27,7 @@ mail       = terminal .. " -e mutt "
 iptraf     = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 
-beautiful.init(os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.awesome/themes/powerarrow-darker/theme.lua")
 
 local layouts = {
     awful.layout.suit.tile,
@@ -106,6 +106,47 @@ cpuwidget = lain.widgets.cpu({
     end
 })
 
+-- Battery
+
+function batreader (value)
+    local handle = io.popen("~/scripts/power.sh " .. value)
+    local result = handle:read("*a")
+    handle:close()
+    return result:gsub("^%s*(.-)%s*$", "%1")
+end
+function update_batwidget ()
+    local charge = batreader("charge")
+    local power = batreader("power")
+    local status = batreader("status")
+    local sign = (status == "Discharging") and "-" or "+"
+    local string = charge .. "% " .. sign ..  power .. "W "
+    batwidget:set_text(string)
+end
+baticon = wibox.widget.imagebox(beautiful.widget_battery)
+batwidget = wibox.widget.textbox()
+battimer = timer({ timeout = 5 })
+battimer:connect_signal("timeout", update_batwidget)
+battimer:start()
+update_batwidget()
+
+-- Backlight
+
+blwidget = wibox.widget.textbox()
+function change_backlight (step)
+    if step then
+        os.execute("~/scripts/brightness.sh " .. step)
+    end
+    local handle = io.popen("~/scripts/brightness.sh")
+    local result = handle:read("*a"):gsub("^%s*(.-)%s*$", "%1")
+    handle:close()
+    blwidget:set_text(" " .. result .. "% ")
+end
+change_backlight()
+blwidget:buttons(awful.util.table.join(
+   awful.button({}, 4, function() change_backlight("+20") end),
+   awful.button({}, 5, function() change_backlight("-20") end)
+))
+                            
 -- / fs
 fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
 fswidget = lain.widgets.fs({
@@ -286,6 +327,8 @@ for s = 1, screen.count() do
     right_layout_add(memicon, memwidget)
     right_layout_add(cpuicon, cpuwidget)
     right_layout_add(fsicon, fswidget)
+    right_layout_add(baticon, batwidget)
+    right_layout_add(blwidget)
     right_layout_add(mytextclock, spr)
     right_layout_add(mylayoutbox[s])
 
