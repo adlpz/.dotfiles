@@ -12,5 +12,8 @@ xmodmap -e "add Control = Control_R"
 # AUR: xcape-git
 xcape -e "Control_R=Escape"
 
+# Synaptics Touchpad: disable when typing
+syndaemon -t -k -d
+
 # Execute WM
-exec awesome -c ~/.awesome/rc.lua 
+exec awesome -c ~/.awesome/rc.lua

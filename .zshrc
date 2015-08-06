@@ -21,7 +21,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 # Path
-export PATH="/Users/adria/tools/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/usr/local/mysql-5.5.28-osx10.6-x86_64/bin:/usr/local/Cellar/php54/5.4.9/bin"
+export PATH="/home/user/tools/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin"
 
 # $EDITOR
 export EDITOR=$(which vim)
@@ -112,5 +112,3 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
