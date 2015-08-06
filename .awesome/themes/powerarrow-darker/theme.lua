@@ -7,8 +7,8 @@
 
 theme                               = {}
 
-themes_dir                          = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-darker"
-theme.wallpaper                     = os.getenv("HOME") .. "/images/blue-wood-wallpaper.jpg"
+themes_dir                          = os.getenv("HOME") .. "/.awesome/themes/powerarrow-darker"
+theme.wallpaper                     = os.getenv("HOME") .. "/images/WALLPAPER"
 wallpaper_cmd                 = "feh --bg-scale " .. theme.wallpaper
 
 theme.font                          = "Terminus 9"
