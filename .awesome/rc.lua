@@ -40,8 +40,8 @@ local layouts = {
 
 -- {{{ Tags
 tags = {
-   names = { "1", "2", "3", "4", "5"},
-   layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[4] }
+   names = { "1 System", "2 Browser", "3 Code", "4 Terminal", "5 Comm", "6", "7", "8" },
+   layout = { layouts[1], layouts[1], layouts[1], layouts[1], layouts[1], layouts[1] , layouts[1], layouts[1] }
 }
 
 for s = 1, screen.count() do
@@ -157,18 +157,20 @@ fswidget = lain.widgets.fs({
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
+function change_volume (step)
+    awful.util.spawn_with_shell("amixer sset Master " .. step)
+    volumewidget:update()
+end
 volicon:buttons(
    awful.util.table.join(
       awful.button({}, 1, function ()
             awful.util.spawn_with_shell("pavucontrol")
    end),
    awful.button({}, 4, function()
-         awful.util.spawn_with_shell("amixer sset Master 1+")
-         volumewidget:update()
+         change_volume("1+")
    end),
    awful.button({}, 5, function()
-         awful.util.spawn ("amixer sset Master 1-")
-         volumewidget:update()
+         change_volume("1-")
    end)
 ))
 volumewidget = lain.widgets.alsa({
@@ -184,12 +186,27 @@ volumewidget = lain.widgets.alsa({
         end
 
         widget:set_text(" " .. volume_now.level .. "% ")
+        widget:buttons(
+            awful.util.table.join(
+            awful.button({}, 1, function ()
+                awful.util.spawn_with_shell("pavucontrol")
+            end),
+            awful.button({}, 4, function()
+                change_volume("1+")
+            end),
+            awful.button({}, 5, function()
+                change_volume("1-")
+           end)
+         ))
     end
 })
 
 -- Net
 neticon = wibox.widget.imagebox(beautiful.widget_net)
-neticon:buttons(awful.util.table.join(awful.button({ }, 1, function () awful.util.spawn_with_shell(iptraf) end)))
+neticon:buttons(awful.util.table.join(
+    awful.button({ }, 1, function () awful.util.spawn_with_shell(terminal .. " -e nmtui") end),
+    awful.button({ }, 2, function () awful.util.spawn_with_shell(iptraf) end)
+    ))
 netwidget = lain.widgets.net({
     settings = function()
         widget:set_markup(markup("#7AC82E", " " .. net_now.received)
@@ -402,7 +419,15 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end)
+    awful.key({ modkey }, "p", function() emenubar.show() end),
+    awful.key({ }, "#233", function() change_backlight("+60") end),
+    awful.key({ }, "#232", function() change_backlight("-60") end),
+    awful.key({ }, "#121", function()
+        awful.util.spawn_with_shell("pactl set-sink-mute 1 toggle")
+        volumewidget:update()
+    end),
+    awful.key({ }, "#122", function() change_volume("1-") end),
+    awful.key({ }, "#123", function() change_volume("1+") end)
 )
 
 clientkeys = awful.util.table.join(
