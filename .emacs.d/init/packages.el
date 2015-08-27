@@ -1,8 +1,10 @@
 ;; packages
 (setq package-list
-      '(popup ;; popup for autocompletion and others
+      '(async ;; async stuff, requirement of others
+        popup ;; popup for autocompletion and others
         cider ;; clojure interactive tools
         clojure-mode ;; clojure mode
+        clj-refactor ;; clojure refactoring tools
         circe ;; irc client
         csv-mode ;; csv mode
         erc-hl-nicks ;; colorful nicks in erc
@@ -14,6 +16,7 @@
         evil-surround ;; surround from vim in evil
         flx-ido ;; fuzzy something
         helm ;; incremental search framework
+        helm-projectile ;; projectile integration for helm
         highlight-parentheses ;; highlight matching parens in lisps
         neotree ;; vim's nerdtree port
         paredit ;; editing sexprs
@@ -31,6 +34,7 @@
         guide-key ;; show next possible key combos to press
         package-utils ;; utils for package management
         company ;; autocomplete magic. Good for CIDER.
+        magit ;; git
         ;; disabled: messess up with namespaces: aggressive-indent ;; indents whole blocks and keeps all nice
         ))
 

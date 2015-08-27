@@ -2,10 +2,20 @@
 (load-file "~/.private.el")
 (load-file "~/.emacs.d/libs/textwriter-mode.el")
 
+;; textwriter
 (require 'textwriter-mode)
+
+;; helm
+(global-set-key (kbd "M-x") 'helm-M-x)
+(require 'helm-config)
+(helm-mode 1)
+(setq helm-mode-fuzzy-match t)
+(setq helm-completion-in-region-fuzzy-match t)
 
 ;; projectile
 (projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
 
 ;; evil
 (require 'evil)
@@ -19,8 +29,10 @@
 (evil-leader/set-key
   "." 'find-tag
   "ag" 'projectile-ag
-  "t" 'projectile-find-file
-  "b" 'ido-switch-buffer
+  "f" 'helm-find-files
+  "s" 'helm-projectile-switch-project
+  "b" 'helm-buffers-list
+  "p" 'helm-projectile
   "cc" 'evilnc-comment-or-uncomment-lines
   "," 'switch-to-previous-buffer
   "w"  'kill-buffer
@@ -115,14 +127,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;; smartparens
 (require 'smartparens-config)
+(define-key sp-keymap (kbd "C-S-l") 'sp-forward-slurp-sexp)
+(define-key sp-keymap (kbd "C-S-h") 'sp-forward-barf-sexp) 
+(define-key sp-keymap (kbd "C-M-S-h") 'sp-backward-slurp-sexp)
+(define-key sp-keymap (kbd "C-M-S-l") 'sp-backward-barf-sexp)
 (define-key sp-keymap (kbd "C-l") 'sp-forward-sexp)
 (define-key sp-keymap (kbd "C-h") 'sp-backward-sexp)
 (define-key sp-keymap (kbd "C-k") 'sp-up-sexp)
 (define-key sp-keymap (kbd "C-j") 'sp-down-sexp)
-(define-key sp-keymap (kbd "C-s-<268632076>") 'sp-forward-slurp-sexp) ;; h
-(define-key sp-keymap (kbd "C-s-<268632072>") 'sp-forward-barf-sexp) ;; j
-(define-key sp-keymap (kbd "C-M-s-<268632072>") 'sp-backward-slurp-sexp) ;; h
-(define-key sp-keymap (kbd "C-M-s-<268632076>") 'sp-backward-barf-sexp) ;; j
+;;(define-key sp-keymap (kbd "C-s-<268632076>") 'sp-forward-slurp-sexp) ;; h
+;;(define-key sp-keymap (kbd "C-s-<268632072>") 'sp-forward-barf-sexp) ;; j
+;;(define-key sp-keymap (kbd "C-M-s-<268632072>") 'sp-backward-slurp-sexp) ;; h
+;;(define-key sp-keymap (kbd "C-M-s-<268632076>") 'sp-backward-barf-sexp) ;; j
 (define-key sp-keymap (kbd "C-<backspace>") 'sp-unwrap-sexp)
 
 ;; evil-smartparens
@@ -135,14 +151,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 (add-hook 'clojure-mode-hook #'highlight-parentheses-mode)
 
+(require 'clj-refactor)
+
+(defun my-clojure-mode-hook ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1) ; for adding require/use/import
+    (cljr-add-keybindings-with-prefix "C-c C-m"))
+
+(add-hook 'clojure-mode-hook #'my-clojure-mode-hook)
+
 ;; lisp
 (add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
 (add-hook 'emacs-lisp-mode-hook #'highlight-parentheses-mode)
 
-;; helm
-(global-set-key (kbd "M-x") 'helm-M-x)
-                                        ;(require 'helm-config)
-                                        ;(helm-mode 1)
 ;; multiple cursors
 (require 'multiple-cursors)
 (global-set-key (kbd "C-M-]") 'mc/mark-next-like-this)
@@ -179,6 +200,38 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; writeroom-mode
 (setq writeroom-mode-line t)
 (setq writeroom-global-effects '())
+
+;;email
+(require 'mu4e)
+(setq mu4e-maildir (expand-file-name "~/Mail"))
+(setq
+ user-mail-address "a@rtf.cc"
+ user-full-name "Adrià López"
+ )
+(require 'smtpmail)
+(setq message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials
+      '(("m.rtf.cc" 587 nil nil))
+      smtp-auth-credentials
+      (expand-file-name "~/.authinfo.gpg")
+      smtpmail-default-smtp-server "m.rtf.cc"
+      smtpmail-smtp-service 587
+      smtpmail-debug-info t)
+
+;; backups and autosave
+(setq
+ backup-directory-alist `(("." . "~/.saves"))
+ backup-by-copying t
+ delete-old-versions t
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t
+ auto-save-default t
+ auto-save-timeout 20
+ auto-save-interval 200)
+
+;; custom variables
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
