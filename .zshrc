@@ -112,3 +112,8 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 
 # fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Helper functions
+c () {
+    echo "$@" | bc -l
+}
