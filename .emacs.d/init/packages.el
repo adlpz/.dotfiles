@@ -35,6 +35,7 @@
         package-utils ;; utils for package management
         company ;; autocomplete magic. Good for CIDER.
         magit ;; git
+        lua-mode ;; lua
         ;; disabled: messess up with namespaces: aggressive-indent ;; indents whole blocks and keeps all nice
         ))
 
