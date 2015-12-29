@@ -159,3 +159,5 @@ map <leader>n :call RenameFile()<cr>
 "noremap <Down> <NOP>
 "noremap <Left> <NOP>
 "noremap <Right> <NOP>
+
+:nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
