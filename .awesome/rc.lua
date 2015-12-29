@@ -12,6 +12,7 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local drop = require("scratchdrop")
 local lain = require("lain")
+local menubar = require("menubar")
 
 -- common
 modkey     = "Mod4"
@@ -55,18 +56,17 @@ separators = lain.util.separators
 
 -- Textclock
 clockicon = wibox.widget.imagebox(beautiful.widget_clock)
-mytextclock = awful.widget.textclock(" %a %d %b  %H:%M")
 
 mytextclock = lain.widgets.abase({
     timeout  = 60,
-    cmd      = "date +'%a %d %b %R'",
+    cmd      = "date +'%R'",
     settings = function()
         widget:set_text(" " .. output)
     end
 })
 
 -- calendar
---lain.widgets.calendar:attach(mytextclock, { font_size = 10 })
+lain.widgets.calendar:attach(mytextclock, { font = "Consolas", font_size = 12 })
 
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
@@ -129,6 +129,29 @@ battimer:connect_signal("timeout", update_batwidget)
 battimer:start()
 update_batwidget()
 
+local batwidget_notification = nil
+
+function batwidget:hide()
+    if batwidget_notification ~= nil then
+        naughty.destroy(batwidget_notification)
+        batwidget_notification = nil
+    end
+end
+
+function batwidget:show()
+    batwidget:hide()
+    local handle = io.popen("ps ax k -%cpu c -o pid,%cpu,%mem,etime,cmd | head -5")
+    local result = handle:read("*a"):gsub("(.-)%s*$", "%1")
+    handle:close()
+    batwidget_notification = naughty.notify({
+        text = result,
+        font = "Consolas 13"
+    })
+end
+
+batwidget:connect_signal('mouse::enter', function() batwidget:show() end)
+batwidget:connect_signal('mouse::leave', function() batwidget:hide() end)
+
 -- Backlight
 
 blwidget = wibox.widget.textbox()
@@ -145,6 +168,24 @@ change_backlight()
 blwidget:buttons(awful.util.table.join(
    awful.button({}, 4, function() change_backlight("+20") end),
    awful.button({}, 5, function() change_backlight("-20") end)
+))
+
+kbwidget = wibox.widget.textbox()
+function next_kb ()
+    local handle = io.popen("~/scripts/keymaps.py next")
+    local current = handle:read("*a"):gsub("^%s*(.-)%s*$", "%1")
+    handle:close()
+    kbwidget:set_text(" " .. current .. " ")
+end
+function current_kb ()
+    local handle = io.popen("~/scripts/keymaps.py current")
+    local current = handle:read("*a"):gsub("^%s*(.-)%s*$", "%1")
+    handle:close()
+    return current
+end
+kbwidget:set_text(" " .. current_kb() .. " ")
+kbwidget:buttons(awful.util.table.join(
+    awful.button({}, 1, function() next_kb() end)
 ))
                             
 -- / fs
@@ -218,7 +259,7 @@ netwidget = lain.widgets.net({
 -- Separators
 spr = wibox.widget.textbox(' ')
 arrl = wibox.widget.imagebox()
-arrl:set_image(beautiful.arrl)
+arrl:set_image(beautiful.arrr)
 arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
 arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
 
@@ -285,6 +326,7 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
 
 mylauncher = awful.widget.launcher({ image = beautiful.submenu_icon,
                                      menu = mymainmenu })
+mylauncher:buttons(awful.util.table.join(awful.button({ }, 3, function () awful.util.spawn_with_shell("~/scripts/lock.sh") end)))
 
 for s = 1, screen.count() do
 
@@ -347,6 +389,7 @@ for s = 1, screen.count() do
     right_layout_add(baticon, batwidget)
     right_layout_add(blwidget)
     right_layout_add(mytextclock, spr)
+    right_layout_add(kbwidget)
     right_layout_add(mylayoutbox[s])
 
     -- Now bring it all together (with the tasklist in the middle)
@@ -363,6 +406,8 @@ end
 globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
+    awful.key({ modkey,           }, "Up",  function() awful.screen.focus_relative(1) end),
+    awful.key({ modkey,           }, "Down",  function() awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
 
     awful.key({ modkey,           }, "j",
@@ -419,7 +464,7 @@ globalkeys = awful.util.table.join(
                   awful.util.getdir("cache") .. "/history_eval")
               end),
     -- Menubar
-    awful.key({ modkey }, "p", function() emenubar.show() end),
+    awful.key({ modkey }, "p", function() menubar.show() end),
     awful.key({ }, "#233", function() change_backlight("+60") end),
     awful.key({ }, "#232", function() change_backlight("-60") end),
     awful.key({ }, "#121", function()
