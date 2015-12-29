@@ -13,14 +13,11 @@ URxvt.background:	rgba:1111/1111/1111/ffff
 URxvt.foreground:	white
 URxvt.cursorColor:	red
 URxvt.underlineColor:	green
-URxvt.font:		xft:Inconsolata:pixelsize=13;antialias=true:bold:hinting=true:
-URxvt.boldFont:		xft:Inconsolata:bold:pixelsize=14:antialias=true:hinting=true:
+URxvt.font:		xft:Consolas:pixelsize=13;antialias=true:bold:hinting=true:
+URxvt.boldFont:		xft:Consolas:bold:pixelsize=14:antialias=true:hinting=true:
 URxvt.perl-ext-common:	default,tabbed
 URxvt.title:		Terminal
 URxvt*visualBell:	false
-URxvt*scrollWithBuffer: false
-URxvt*scrollBar_right:	true
-URxvt*scrollstyle:	plain
 URxvt*depth:		24
 URxvt*transparent:	true
 URxvt*tint:         black
@@ -31,10 +28,19 @@ URxvt.tabbed.tab-bg:-1
 URxvt.tabbed.tabbar-fg:-2
 URxvt.tabbed.tabbar-bg:-1
 
-! This screenname used to fuck rendering of highlights...
-!URxvt*termName:screen-256color
-! This was the fix, not needed anymore
-!URxvt*colorIT: #ff0000
+! Scrolling
+!! Do not scroll with output
+URxvt*scrollTtyOutput:      false
+!! Scfroll in relation to buffer
+URxvt*scrollWithBuffer: true
+!! Scroll back to bottom on keypress
+URxvt*scrollTtyKeypress: true
+!! Scrollbar Style
+*scrollBar:	false
+
+! Copy/Paste
+URxvt*clipboard.copycmd:    xclip -i -selection clipboard
+URxvt*clipboard.pastecmd:   xclip -o -selection clipboard
 
 ! Xpdf
 xpdf*enableFreetype:	yes
