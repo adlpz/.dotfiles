@@ -13,7 +13,7 @@ xmodmap -e "add Control = Control_R"
 xcape -e "Control_R=Escape"
 
 # Synaptics Touchpad: disable when typing
-syndaemon -t -k -d
+syndaemon -i 1 -t -k -d
 
 # Execute WM
 exec awesome -c ~/.awesome/rc.lua
