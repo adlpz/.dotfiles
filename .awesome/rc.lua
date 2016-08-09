@@ -14,6 +14,38 @@ local drop = require("scratchdrop")
 local lain = require("lain")
 local menubar = require("menubar")
 
+-- Helper Functions
+
+function run_command (command)
+    local handle = io.popen(command)
+    local text = handle:read("*a"):gsub("^%s*(.-)%s*$", "%1")
+    handle:close()
+    return text
+end
+
+function add_hover_notification(widget, command)
+    local notification = nil
+    local hide = function()
+        if notification ~= nil then
+            naughty.destroy(notification)
+            notification = nil
+        end
+    end
+    local show = function()
+        if notification ~= nil then
+            return
+        end
+        local text = run_command(command)
+        notification = naughty.notify({
+            text = text,
+            font = "Consolas 13"
+        })
+    end
+
+    widget:connect_signal('mouse::enter', function() show() end)
+    widget:connect_signal('mouse::leave', function() hide() end)
+end
+
 -- common
 modkey     = "Mod4"
 altkey     = "Mod1"
@@ -31,10 +63,10 @@ musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 beautiful.init(os.getenv("HOME") .. "/.awesome/themes/powerarrow-darker/theme.lua")
 
 local layouts = {
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
+    awful.layout.suit.tile,
+    awful.layout.suit.tile.bottom,
     awful.layout.suit.floating,
 }
 -- }}}
@@ -52,21 +84,24 @@ end
 
 -- {{{ Wibox
 markup = lain.util.markup
-separators = lain.util.separators
 
 -- Textclock
 clockicon = wibox.widget.imagebox(beautiful.widget_clock)
 
 mytextclock = lain.widgets.abase({
-    timeout  = 60,
-    cmd      = "date +'%R'",
+    timeout  = 27,
+    cmd      = "LANG=ca_ES.UTF-8 date +'%a%d/%H%M'",
     settings = function()
         widget:set_text(" " .. output)
     end
 })
 
 -- calendar
-lain.widgets.calendar:attach(mytextclock, { font = "Consolas", font_size = 12 })
+lain.widgets.calendar:attach(mytextclock, {
+    font = "Consolas", 
+    font_size = 12,
+    cal = "LANG=ca_ES.UTF-8 /usr/bin/cal"
+})
 
 -- MPD
 mpdicon = wibox.widget.imagebox(beautiful.widget_music)
@@ -98,6 +133,8 @@ memwidget = lain.widgets.mem({
     end
 })
 
+add_hover_notification(memwidget, "~/scripts/top.py mem")
+
 -- CPU
 cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
 cpuwidget = lain.widgets.cpu({
@@ -105,6 +142,8 @@ cpuwidget = lain.widgets.cpu({
         widget:set_text(" " .. cpu_now.usage .. "% ")
     end
 })
+
+add_hover_notification(cpuwidget, "~/scripts/top.py cpu")
 
 -- Battery
 
@@ -129,28 +168,6 @@ battimer:connect_signal("timeout", update_batwidget)
 battimer:start()
 update_batwidget()
 
-local batwidget_notification = nil
-
-function batwidget:hide()
-    if batwidget_notification ~= nil then
-        naughty.destroy(batwidget_notification)
-        batwidget_notification = nil
-    end
-end
-
-function batwidget:show()
-    batwidget:hide()
-    local handle = io.popen("ps ax k -%cpu c -o pid,%cpu,%mem,etime,cmd | head -5")
-    local result = handle:read("*a"):gsub("(.-)%s*$", "%1")
-    handle:close()
-    batwidget_notification = naughty.notify({
-        text = result,
-        font = "Consolas 13"
-    })
-end
-
-batwidget:connect_signal('mouse::enter', function() batwidget:show() end)
-batwidget:connect_signal('mouse::leave', function() batwidget:hide() end)
 
 -- Backlight
 
@@ -170,6 +187,8 @@ blwidget:buttons(awful.util.table.join(
    awful.button({}, 5, function() change_backlight("-20") end)
 ))
 
+-- Keyboard
+
 kbwidget = wibox.widget.textbox()
 function next_kb ()
     local handle = io.popen("~/scripts/keymaps.py next")
@@ -187,19 +206,46 @@ kbwidget:set_text(" " .. current_kb() .. " ")
 kbwidget:buttons(awful.util.table.join(
     awful.button({}, 1, function() next_kb() end)
 ))
-                            
+
+-- Caffeine
+
+
+caffwidget = wibox.widget.textbox()
+function set_current_caffeine ()
+    local current = run_command("~/scripts/caffeine.sh current")
+    local text = current .. 's'
+    if tonumber(current) >= 3200 then
+        text = "<span color='#ff0000' font_weight='bold'>" .. text .. "</span>"
+    elseif tonumber(current) > 300 then
+        text = "<b>" .. text .. "</b>"
+    end
+    caffwidget:set_markup(text)
+end
+
+function next_caffeine ()
+    run_command("~/scripts/caffeine.sh next")
+    set_current_caffeine()
+end
+set_current_caffeine()
+caffwidget:buttons(awful.util.table.join(
+    awful.button({}, 1, function() next_caffeine() end)
+))
+
 -- / fs
 fsicon = wibox.widget.imagebox(beautiful.widget_hdd)
 fswidget = lain.widgets.fs({
     settings  = function()
         widget:set_text(" " .. fs_now.used .. "% ")
-    end
+    end,
+    notification_preset = {
+        font = "Consolas 13"
+    }
 })
 
 -- ALSA volume
 volicon = wibox.widget.imagebox(beautiful.widget_vol)
 function change_volume (step)
-    awful.util.spawn_with_shell("amixer sset Master " .. step)
+    awful.util.spawn_with_shell("amixer sset DAC0 " .. step)
     volumewidget:update()
 end
 volicon:buttons(
@@ -215,6 +261,7 @@ volicon:buttons(
    end)
 ))
 volumewidget = lain.widgets.alsa({
+    channel = "DAC0",
     settings = function()
         if volume_now.status == "off" then
             volicon:set_image(beautiful.widget_vol_mute)
@@ -244,24 +291,20 @@ volumewidget = lain.widgets.alsa({
 
 -- Net
 neticon = wibox.widget.imagebox(beautiful.widget_net)
-neticon:buttons(awful.util.table.join(
+netwidget = lain.widgets.net({
+    settings = function()
+        widget:set_markup(
+            run_command("iw dev wlp2s0 link | grep SSID | cut -d' ' -f2-"):gsub("%&", "") ..
+            markup("#7AC82E", " " .. net_now.received) .. 
+            " " ..
+            markup("#46A8C3", " " .. net_now.sent .. " ")
+        )
+    end
+})
+netwidget:buttons(awful.util.table.join(
     awful.button({ }, 1, function () awful.util.spawn_with_shell(terminal .. " -e nmtui") end),
     awful.button({ }, 2, function () awful.util.spawn_with_shell(iptraf) end)
     ))
-netwidget = lain.widgets.net({
-    settings = function()
-        widget:set_markup(markup("#7AC82E", " " .. net_now.received)
-                          .. " " ..
-                          markup("#46A8C3", " " .. net_now.sent .. " "))
-    end
-})
-
--- Separators
-spr = wibox.widget.textbox(' ')
-arrl = wibox.widget.imagebox()
-arrl:set_image(beautiful.arrr)
-arrl_dl = separators.arrow_left(beautiful.bg_focus, "alpha")
-arrl_ld = separators.arrow_left("alpha", beautiful.bg_focus)
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -310,22 +353,8 @@ mytasklist.buttons = awful.util.table.join(
                                               awful.client.focus.byidx(-1)
                                               if client.focus then client.focus:raise() end
                                           end))
--- {{{ Menu
--- Create a laucher widget and a main menu
-myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
-}
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
-
-mylauncher = awful.widget.launcher({ image = beautiful.submenu_icon,
-                                     menu = mymainmenu })
+mylauncher = wibox.widget.imagebox(beautiful.submenu_icon)
 mylauncher:buttons(awful.util.table.join(awful.button({ }, 3, function () awful.util.spawn_with_shell("~/scripts/lock.sh") end)))
 
 for s = 1, screen.count() do
@@ -353,33 +382,19 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the upper left
     local left_layout = wibox.layout.fixed.horizontal()
     left_layout:add(mylauncher)
-    left_layout:add(spr)
     left_layout:add(mytaglist[s])
     left_layout:add(mypromptbox[s])
-    left_layout:add(spr)
 
     -- Widgets that are aligned to the upper right
-    local right_layout_toggle = true
     local function right_layout_add (...)
         local arg = {...}
-        if right_layout_toggle then
-            right_layout:add(arrl_ld)
-            for i, n in pairs(arg) do
-                right_layout:add(wibox.widget.background(n ,beautiful.bg_focus))
-            end
-        else
-            right_layout:add(arrl_dl)
-            for i, n in pairs(arg) do
-                right_layout:add(n)
-            end
+        for i, n in pairs(arg) do
+            right_layout:add(n)
         end
-        right_layout_toggle = not right_layout_toggle
     end
 
     right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
-    right_layout:add(spr)
-    right_layout:add(arrl)
     right_layout_add(neticon,netwidget)
     right_layout_add(mpdicon, mpdwidget)
     right_layout_add(volicon, volumewidget)
@@ -388,7 +403,8 @@ for s = 1, screen.count() do
     right_layout_add(fsicon, fswidget)
     right_layout_add(baticon, batwidget)
     right_layout_add(blwidget)
-    right_layout_add(mytextclock, spr)
+    right_layout_add(caffwidget)
+    right_layout_add(mytextclock)
     right_layout_add(kbwidget)
     right_layout_add(mylayoutbox[s])
 
@@ -409,6 +425,7 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "Up",  function() awful.screen.focus_relative(1) end),
     awful.key({ modkey,           }, "Down",  function() awful.screen.focus_relative(-1) end),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),
+    awful.key({ modkey, "Shift" }, "Up", function() awful.client.movetoscreeen(client.focus) end),
 
     awful.key({ modkey,           }, "j",
         function ()
@@ -420,7 +437,6 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
@@ -465,6 +481,7 @@ globalkeys = awful.util.table.join(
               end),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end),
+    -- Backlight and Audio
     awful.key({ }, "#233", function() change_backlight("+60") end),
     awful.key({ }, "#232", function() change_backlight("-60") end),
     awful.key({ }, "#121", function()
@@ -472,7 +489,14 @@ globalkeys = awful.util.table.join(
         volumewidget:update()
     end),
     awful.key({ }, "#122", function() change_volume("1-") end),
-    awful.key({ }, "#123", function() change_volume("1+") end)
+    awful.key({ }, "#123", function() change_volume("1+") end),
+    awful.key({ modkey, altkey }, "#49", nil, function()
+          next_kb()
+          naughty.notify({
+                text = "Changed Keyboard Map",
+                timeout = 1
+          })
+    end)
 )
 
 clientkeys = awful.util.table.join(

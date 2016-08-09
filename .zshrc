@@ -7,6 +7,9 @@ source $ZSH/oh-my-zsh.sh
 CUSTOM_ZSH=$HOME/.zsh
 source $CUSTOM_ZSH/*
 
+# TERM
+export TERM='xterm-256color'
+
 # Banner
 _print_zsh_banner
 
@@ -117,3 +120,9 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 c () {
     echo "$@" | bc -l
 }
+
+# Go
+export GOROOT=/usr/lib/go
+export GOBIN=$GOROOT/bin
+export GOPATH=$HOME/golang
+export PATH=$PATH:$GOBIN

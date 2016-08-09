@@ -17,6 +17,19 @@
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 
+;; multi web mode
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+                                    (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+                                                      (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html"))
+(multi-web-global-mode 1)
+
+;; multi-term
+(require 'multi-term)
+(setq multi-term-program "/usr/bin/zsh")
+
 ;; evil
 (require 'evil)
 (evil-mode 1)
@@ -44,7 +57,8 @@
   "gh" 'windmove-left
   "vs" 'split-window-right
   "hs" 'split-window-below
-  "x" 'smex)
+  "x" 'smex
+  "t" 'multi-term)
 
 (global-evil-surround-mode t)
 
@@ -89,6 +103,40 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; theme
 (load-theme 'base16-tomorrow-dark t)
 
+;; override terminal fonts, as the definition changed
+
+;; term
+(defface term-color-black 
+           '((t (:foreground "#3f3f3f" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-red
+           '((t (:foreground "#cc9393" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-green
+           '((t (:foreground "#7f9f7f" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-yellow
+           '((t (:foreground "#f0dfaf" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-blue 
+           '((t (:foreground "#6d85ba" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-magenta 
+           '((t (:foreground "#dc8cc3" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-cyan
+           '((t (:foreground "#93e0e3" :background "#272822"))) 
+             "Unhelpful docstring.")
+(defface term-color-white
+           '((t (:foreground "#dcdccc" :background "#272822"))) 
+             "Unhelpful docstring.")
+'(term-default-fg-color ((t (:inherit term-color-white))))
+'(term-default-bg-color ((t (:inherit term-color-black))))
+
+(setq ansi-term-color-vector
+        [term term-color-black term-color-red term-color-green term-color-yellow 
+                  term-color-blue term-color-magenta term-color-cyan term-color-white])
+
 ;; highlight current line
 (global-hl-line-mode 1)
 
@@ -123,7 +171,12 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ;; neotree
 (require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+(add-hook 'neotree-mode-hook
+            (lambda ()
+              (define-key evil-normal-state-local-map (kbd "TAB") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "SPC") 'neotree-enter)
+              (define-key evil-normal-state-local-map (kbd "q") 'neotree-hide)
+              (define-key evil-normal-state-local-map (kbd "RET") 'neotree-enter)))
 
 ;; smartparens
 (require 'smartparens-config)
@@ -230,6 +283,39 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
  auto-save-default t
  auto-save-timeout 20
  auto-save-interval 200)
+
+;; -- org mode -- 
+
+;; Italics
+(setq org-hide-emphasis-markers t)
+
+;; Better bullet points
+(font-lock-add-keywords 'org-mode
+                        '(("^ +\\([-*]\\) "
+                           (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+;; Header Bullets
+(require 'org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+;; Better headers
+(let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                             ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                             ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                             ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                             (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces 'user
+                          `(org-level-8 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-7 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-6 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-5 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+                          `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+                          `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+                          `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+                          `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
 
 ;; custom variables
 

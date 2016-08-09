@@ -36,6 +36,9 @@
         company ;; autocomplete magic. Good for CIDER.
         magit ;; git
         lua-mode ;; lua
+        multi-term ;; better terminal emulation
+        multi-web-mode ;; better editing of html+css+js+php
+        org-bullets ;; better org mode bullet points for headers
         ;; disabled: messess up with namespaces: aggressive-indent ;; indents whole blocks and keeps all nice
         ))
 

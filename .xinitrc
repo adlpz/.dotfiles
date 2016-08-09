@@ -15,5 +15,8 @@ xcape -e "Control_R=Escape"
 # Synaptics Touchpad: disable when typing
 syndaemon -i 1 -t -k -d
 
+# Xbindkeys
+xbindkeys
+
 # Execute WM
 exec awesome -c ~/.awesome/rc.lua

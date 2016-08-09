@@ -9,24 +9,25 @@ Xft.hintstyle: hintslight
 
 ! Defaults for URXVT 256c
 URxvt.buffered:		true
-URxvt.background:	rgba:1111/1111/1111/ffff
+URxvt.background: black
 URxvt.foreground:	white
 URxvt.cursorColor:	red
 URxvt.underlineColor:	green
 URxvt.font:		xft:Consolas:pixelsize=13;antialias=true:bold:hinting=true:
 URxvt.boldFont:		xft:Consolas:bold:pixelsize=14:antialias=true:hinting=true:
-URxvt.perl-ext-common:	default,tabbed
-URxvt.title:		Terminal
 URxvt*visualBell:	false
-URxvt*depth:		24
+URxvt*depth:		32
 URxvt*transparent:	true
 URxvt*tint:         black
-URxvt*shading:      10
+URxvt*shading:      30
 URxvt*inheritPixmap:true
 URxvt.tabbed.tab-fg:6
 URxvt.tabbed.tab-bg:-1
 URxvt.tabbed.tabbar-fg:-2
 URxvt.tabbed.tabbar-bg:-1
+urxvt*perl-ext-common:        default,matcher
+urxvt*urlLauncher:        /usr/bin/chromium
+urxvt*matcher.button:        1
 
 ! Scrolling
 !! Do not scroll with output
@@ -35,6 +36,8 @@ URxvt*scrollTtyOutput:      false
 URxvt*scrollWithBuffer: true
 !! Scroll back to bottom on keypress
 URxvt*scrollTtyKeypress: true
+!! Lotsa Lines
+URxvt*saveLines: 65535
 !! Scrollbar Style
 *scrollBar:	false
 
