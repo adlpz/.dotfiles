@@ -61,7 +61,7 @@ vagrant_up_and_ssh() {
 }
 
 # Aliases
-alias ls='ls -G'
+alias ls='ls -G --color=auto'
 alias l='ls -l'
 alias v="vagrant"
 alias vssh="vagrant_up_and_ssh"

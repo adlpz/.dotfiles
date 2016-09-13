@@ -29,6 +29,26 @@ urxvt*perl-ext-common:        default,matcher
 urxvt*urlLauncher:        /usr/bin/chromium
 urxvt*matcher.button:        1
 
+!! Colors
+! Optometrist colors
+
+*color0: #010101
+*color1: #e48167
+*color10: #82b356
+*color11: #efce75
+*color12: #6780c7
+*color13: #d166ae
+*color14: #7e64c9
+*color15: #fffefe
+*color2: #83b758
+*color3: #efce75
+*color4: #6c7ec5
+*color5: #cf63ac
+*color6: #825fcd
+*color7: #acaaac
+*color8: #717171
+*color9: #e07d66
+
 ! Scrolling
 !! Do not scroll with output
 URxvt*scrollTtyOutput:      false

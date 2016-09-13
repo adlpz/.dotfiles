@@ -88,6 +88,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ;; ui changes
 (setq ring-bell-function 'ignore) ;; disable bell
 (tool-bar-mode -1) ;; disable toolbar
+(menu-bar-mode -1) ;; disable menu bar
 (when window-system (set-frame-size (selected-frame) 160 50)) ;; larger size
 (setq inhibit-startup-message t) ;; disable welcome message
 (scroll-bar-mode -1) ;; disable scrollbar
@@ -312,10 +313,10 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
                           `(org-level-6 ((t (,@headline ,@variable-tuple))))
                           `(org-level-5 ((t (,@headline ,@variable-tuple))))
                           `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-                          `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-                          `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-                          `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-                          `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
+                          `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.2))))
+                          `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.3))))
+                          `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.4))))
+                          `(org-document-title ((t (,@headline ,@variable-tuple :height 1.4 :underline nil))))))
 
 ;; custom variables
 

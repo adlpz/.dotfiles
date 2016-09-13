@@ -63,10 +63,8 @@ musicplr   = terminal .. " -g 130x34-320+16 -e ncmpcpp "
 beautiful.init(os.getenv("HOME") .. "/.awesome/themes/powerarrow-darker/theme.lua")
 
 local layouts = {
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
     awful.layout.suit.tile,
-    awful.layout.suit.tile.bottom,
+    awful.layout.suit.fair,
     awful.layout.suit.floating,
 }
 -- }}}
@@ -128,8 +126,9 @@ mpdwidget = lain.widgets.mpd({
 -- MEM
 memicon = wibox.widget.imagebox(beautiful.widget_mem)
 memwidget = lain.widgets.mem({
-    settings = function()
-        widget:set_text(" " .. mem_now.used .. "MB ")
+      settings = function()
+         local text = string.format("%4.2f", mem_now.used/1024)
+        widget:set_text(" " .. text .. "GB ")
     end
 })
 
@@ -139,7 +138,7 @@ add_hover_notification(memwidget, "~/scripts/top.py mem")
 cpuicon = wibox.widget.imagebox(beautiful.widget_cpu)
 cpuwidget = lain.widgets.cpu({
     settings = function()
-        widget:set_text(" " .. cpu_now.usage .. "% ")
+       widget:set_text(" " .. string.format("%02d", cpu_now.usage) .. "% ")
     end
 })
 
@@ -154,11 +153,18 @@ function batreader (value)
     return result:gsub("^%s*(.-)%s*$", "%1")
 end
 function update_batwidget ()
-    local charge = batreader("charge")
+   local charge = batreader("charge")
+   charge = tonumber(charge)
+    if (charge >= 100) then
+       charge = string.format("%5.1f", charge) .. "%"
+    else
+       charge = string.format("%5.2f", charge) .. "%"
+    end
     local power = batreader("power")
+    power = string.format("%05.2f", tonumber(power))
     local status = batreader("status")
     local sign = (status == "Discharging") and "-" or "+"
-    local string = charge .. "% " .. sign ..  power .. "W "
+    local string = charge .. " " .. sign ..  power .. "W "
     batwidget:set_text(string)
 end
 baticon = wibox.widget.imagebox(beautiful.widget_battery)
@@ -295,9 +301,9 @@ netwidget = lain.widgets.net({
     settings = function()
         widget:set_markup(
             run_command("iw dev wlp2s0 link | grep SSID | cut -d' ' -f2-"):gsub("%&", "") ..
-            markup("#7AC82E", " " .. net_now.received) .. 
+               markup("#7AC82E", " " .. string.format("%6.1f", net_now.received)) .. 
             " " ..
-            markup("#46A8C3", " " .. net_now.sent .. " ")
+               markup("#46A8C3", " " .. string.format("%6.1f", net_now.sent) .. " ")
         )
     end
 })
@@ -460,10 +466,8 @@ globalkeys = awful.util.table.join(
 
     awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)    end),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)    end),
-    awful.key({ modkey, "Shift"   }, "h",     function () awful.tag.incnmaster( 1)      end),
-    awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1)      end),
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1)         end),
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1)         end),
+    awful.key({ modkey, "Shift"   }, "h",     function () awful.client.incwfact(-0.05)      end),
+    awful.key({ modkey, "Shift"   }, "l",     function () awful.client.incwfact( 0.05)      end),
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
