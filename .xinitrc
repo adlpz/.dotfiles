@@ -26,4 +26,7 @@ compton -b
 Esetroot -s ~/images/WALLPAPER
 
 # Execute WM
-exec awesome -c ~/.awesome/rc.lua
+#exec awesome -c ~/.awesome/rc-pro.lua
+#exec startkde
+#exec gnome-session
+exec awesome
