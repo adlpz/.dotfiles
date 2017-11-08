@@ -13,15 +13,15 @@ function set_volume_text(volume)
 end
 
 function volume_up ()
-    helpers.run_command("~/Projects/volumecontrol/volumecontrol.py volume-up", set_volume_text)
+    helpers.run_command("~/tools/volumecontrol/volumecontrol.py volume-up", set_volume_text)
 end
 
 function volume_down ()
-    helpers.run_command("~/Projects/volumecontrol/volumecontrol.py volume-down", set_volume_text)
+    helpers.run_command("~/tools/volumecontrol/volumecontrol.py volume-down", set_volume_text)
 end
 
 function refresh_volume ()
-    helpers.run_command("~/Projects/volumecontrol/volumecontrol.py show-volume", set_volume_text)
+    helpers.run_command("~/tools/volumecontrol/volumecontrol.py show-volume", set_volume_text)
 end
 
 volwidget:buttons(
