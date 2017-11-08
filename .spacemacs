@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     javascript
      sql
      html
      php
@@ -36,13 +37,17 @@ values."
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
-     spell-checking
+     ;;spell-checking
      syntax-checking
      version-control
 
      ;; Layers added by me
      clojure
      lua
+
+     ;; Nonsense
+     xkcd
+     selectric
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -301,6 +306,8 @@ you should place your code here."
         scroll-conservatively 10000
         scroll-preserve-screen-position 1
         mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  ;; Configuration to get cider to run figwheel by default when running a cljs repl
+  (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -313,7 +320,7 @@ you should place your code here."
  '(cider-boot-parameters "cider repl -s wait")
  '(package-selected-packages
    (quote
-    (wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper ivy smeargle orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md flyspell-correct-helm flyspell-correct evil-magit magit magit-popup git-commit with-editor diff-hl auto-dictionary color-theme-sanityinc-tomorrow packed avy evil sql-indent web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode uuidgen toc-org request org-plus-contrib org-bullets link-hint hide-comnt eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets spacemacs-theme spaceline powerline smooth-scrolling restart-emacs persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lua-mode leuven-theme info+ indent-guide hungry-delete hl-todo highlight-indentation helm-projectile helm-make projectile helm-company helm-ag google-translate flycheck-pos-tip flycheck expand-region evil-surround evil-nerd-commenter evil-mc evil-matchit company-statistics company-quickhelp company clj-refactor hydra inflections multiple-cursors cider spinner clojure-mode aggressive-indent ace-window ace-link auto-complete anzu iedit smartparens dash highlight undo-tree yasnippet helm helm-core async package-build use-package which-key bind-map ws-butler window-numbering volatile-highlights vi-tilde-fringe solarized-theme s rainbow-delimiters queue quelpa pos-tip popwin popup pkg-info paredit monokai-theme lorem-ipsum linum-relative let-alist ido-vertical-mode highlight-parentheses highlight-numbers help-fns+ helm-themes helm-swoop helm-mode-manager helm-flx helm-descbinds helm-c-yasnippet golden-ratio flx-ido fill-column-indicator fancy-battery exec-path-from-shell evil-visualstar evil-tutor evil-search-highlight-persist evil-numbers evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav edn diminish define-word clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste bind-key auto-yasnippet auto-highlight-symbol auto-compile adaptive-wrap ace-jump-helm-line ac-ispell)))
+    (xkcd selectric-mode web-beautify livid-mode skewer-mode simple-httpd json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc company-tern dash-functional tern coffee-mode wgrep smex ivy-hydra flyspell-correct-ivy counsel-projectile counsel swiper ivy smeargle orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mmm-mode markdown-toc markdown-mode magit-gitflow htmlize helm-gitignore gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gh-md flyspell-correct-helm flyspell-correct evil-magit magit magit-popup git-commit with-editor diff-hl auto-dictionary color-theme-sanityinc-tomorrow packed avy evil sql-indent web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data phpunit phpcbf php-extras php-auto-yasnippets drupal-mode php-mode uuidgen toc-org request org-plus-contrib org-bullets link-hint hide-comnt eyebrowse evil-visual-mark-mode evil-unimpaired evil-ediff dumb-jump f column-enforce-mode clojure-snippets spacemacs-theme spaceline powerline smooth-scrolling restart-emacs persp-mode pcre2el paradox page-break-lines open-junk-file neotree move-text macrostep lua-mode leuven-theme info+ indent-guide hungry-delete hl-todo highlight-indentation helm-projectile helm-make projectile helm-company helm-ag google-translate flycheck-pos-tip flycheck expand-region evil-surround evil-nerd-commenter evil-mc evil-matchit company-statistics company-quickhelp company clj-refactor hydra inflections multiple-cursors cider spinner clojure-mode aggressive-indent ace-window ace-link auto-complete anzu iedit smartparens dash highlight undo-tree yasnippet helm helm-core async package-build use-package which-key bind-map ws-butler window-numbering volatile-highlights vi-tilde-fringe solarized-theme s rainbow-delimiters queue quelpa pos-tip popwin popup pkg-info paredit monokai-theme lorem-ipsum linum-relative let-alist ido-vertical-mode highlight-parentheses highlight-numbers help-fns+ helm-themes helm-swoop helm-mode-manager helm-flx helm-descbinds helm-c-yasnippet golden-ratio flx-ido fill-column-indicator fancy-battery exec-path-from-shell evil-visualstar evil-tutor evil-search-highlight-persist evil-numbers evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu elisp-slime-nav edn diminish define-word clean-aindent-mode cider-eval-sexp-fu buffer-move bracketed-paste bind-key auto-yasnippet auto-highlight-symbol auto-compile adaptive-wrap ace-jump-helm-line ac-ispell)))
  '(paradox-github-token t))
 
 (custom-set-faces

@@ -19,7 +19,7 @@ end
 
 function next_kb ()
   helpers.run_command(
-    "~/scripts/keymaps.py next",
+    "sleep 1 && ~/scripts/keymaps.py next",
     function(stdout)
       notify_keymap_change(stdout)
       set_keymap_text(stdout)
@@ -29,7 +29,7 @@ end
 
 -- On start, se the text async
 helpers.run_command(
-  "~/scripts/keymaps.py current",
+  "sleep 1 && ~/scripts/keymaps.py current",
   function(stdout)
     set_keymap_text(stdout)
   end

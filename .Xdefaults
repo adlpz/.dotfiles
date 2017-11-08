@@ -19,7 +19,7 @@ URxvt*visualBell:	false
 URxvt*depth:		32
 URxvt*transparent:	true
 URxvt*tint:         black
-URxvt*shading:      30
+URxvt*shading:      10
 URxvt*inheritPixmap:true
 URxvt.tabbed.tab-fg:6
 URxvt.tabbed.tab-bg:-1
@@ -45,8 +45,8 @@ urxvt*matcher.button:        1
 *color4: #6c7ec5
 *color5: #cf63ac
 *color6: #825fcd
-*color7: #acaaac
-*color8: #717171
+*color7: #dddddd
+*color8: #bbbbbb
 *color9: #e07d66
 
 ! Scrolling

@@ -161,3 +161,12 @@ map <leader>n :call RenameFile()<cr>
 "noremap <Right> <NOP>
 
 :nnoremap <Leader>s :%s/\<<C-r><C-w>\>//g<Left><Left>
+
+" Enable persistent undo (beyond lastest save)
+if has('persistent_undo')
+    set undofile
+    set undodir=$HOME/.vim/undo
+endif
+
+" Allow hidden files (unsaved buffers in the background)
+set hidden

@@ -1,7 +1,7 @@
 # oh-my-zsh
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-plugins=(git)
+plugins=(ssh-agent)
 source $ZSH/oh-my-zsh.sh
 
 CUSTOM_ZSH=$HOME/.zsh
@@ -12,6 +12,9 @@ export TERM='xterm-256color'
 
 # Banner
 _print_zsh_banner
+
+# Load ZSH colors
+autoload -U colors && colors
 
 # Custom prompt
 PROMPT=$'%{$fg_bold[blue]%}$(parse_git_dirty)$(git_prompt_info)%{$fg_bold[blue]%}%{$fg[white]%}%c%{$fg_bold[cyan]%} %#%{$reset_color%} '
@@ -24,7 +27,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 # Path
-export PATH="/home/user/tools/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/home/user/.gem/ruby/2.2.0/bin"
+export PATH="/home/user/tools/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/home/user/.gem/ruby/2.2.0/bin:/home/user/tools/android-sdk-linux/platform-tools/"
 
 # $EDITOR
 export EDITOR=$(which vim)
@@ -126,3 +129,8 @@ export GOROOT=/usr/lib/go
 export GOBIN=$GOROOT/bin
 export GOPATH=$HOME/golang
 export PATH=$PATH:$GOBIN
+
+# Ruby
+RUBYPATH=$HOME/.gem/ruby/2.4.0/bin
+export PATH=$PATH:$RUBYPATH
+

@@ -22,4 +22,4 @@ blwidget:buttons(awful.util.table.join(
                    awful.button({}, 5, function() change_backlight("-20") end)
 ))
 
-return {widget=blwidget,icon=blicon}
+return {widget=blwidget,icon=blicon,change=change_backlight}

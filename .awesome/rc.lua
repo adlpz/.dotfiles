@@ -32,6 +32,9 @@ local w_keymap = require("adlpz.widgets.keymap")
 local w_net = require("adlpz.widgets.net")
 local w_volume = require("adlpz.widgets.volume")
 
+-- Helpers
+local helpers = require("adlpz.helpers")
+
 -- Set theme
 
 -- {{{ Error handling
@@ -112,7 +115,18 @@ end
 
 -- {{{ Menu
 -- Create a launcher widget and a main menu
-myawesomemenu = {
+
+screensmenu = {
+  {"single", function() helpers.run_command("~/.screenlayout/single.sh") end},
+  {"oficina", function() helpers.run_command("~/.screenlayout/oficina-2-h.sh") end}
+}
+
+tasksmenu = {
+  {"kill spotify", function() helpers.run_command("killall -TERM spotify") end},
+  {"bluetooth", terminal .. " -e bluetoothctl"}
+}
+
+awesomemenu = {
    { "hotkeys", function() return false, hotkeys_popup.show_help end},
    { "manual", terminal .. " -e man awesome" },
    { "edit config", editor_cmd .. " " .. awesome.conffile },
@@ -120,13 +134,15 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end}
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mainmenu = awful.menu({ items = {
+                            {"screen", screensmenu},
+                            {"tasks", tasksmenu},
+                            { "awesome", awesomemenu}}})
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
+mylauncher = awful.widget.button({ image = beautiful.awesome_icon })
+mylauncher:buttons(gears.table.join(
+                     awful.button({}, 1, nil, function() mainmenu:toggle() end),
+                     awful.button({}, 3, nil, function() helpers.run_command("~/scripts/lock.sh") end)))
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -220,7 +236,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
-    -- Create the wibox
+    -- Create the wiboxhttps://news.ycombinator.com/news?p=2
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Add widgets to the wibox
@@ -266,7 +282,7 @@ end)
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    awful.button({ }, 3, function () mainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -373,13 +389,26 @@ globalkeys = gears.table.join(
               {description = "show the menubar", group = "launcher"}),
 
     -- dmenu-extended
-    awful.key({ modkey }, "l", function() awful.spawn("dmenu_extended") end,
+    awful.key({ modkey, "Control" }, "p", function() awful.spawn("dmenu_extended") end,
       {description = "show dmenu-extended", group = "launcher"}),
 
     -- &&&&&& CUSTOM KEY BINDINGS &&&&&&&
 
     awful.key({ modkey, altkey }, "space", function() w_keymap.next_kb() end,
-      {description = "change keymap"})
+      {description = "Change keyboard keymap", group = "global"}),
+
+    -- Backight Control
+    awful.key({}, "#233", function() w_backlight.change("+60") end),
+    awful.key({}, "#232", function() w_backlight.change("-60") end),
+
+    -- Volume Control
+    awful.key({}, "#121", function()  end), -- Mute
+    awful.key({}, "#122", function()  end), -- Volume Down
+    awful.key({}, "#123", function()  end), -- Volume Up
+    awful.key({modkey, "Control"}, "v", function() awful.spawn("volumecontrol") end, {description = "Volume Control UI", group = "global"}), -- Volume Control on META+CTRL+V
+
+    -- Bluetooth
+    awful.key({modkey, "Control"}, "b", function() awful.util.spawn_with_shell(terminal .. " -e bluetoothctl") end, {description = "Bluetooth Control", group = "global"})
 )
 
 clientkeys = gears.table.join(
@@ -509,6 +538,16 @@ awful.rules.rules = {
      }
     },
 
+    -- Apps that run centered and floating
+    { rule_any = {
+        class = {"Cerebro"},
+        name = {"volumecontrol.py", "bluetoothctl"}
+    }, properties = { floating = true,
+                      maximized = false,
+                      maximized_vertical = false,
+                      maximized_horizontal = false,
+                      placement = awful.placement.centered}},
+
     -- Floating clients.
     { rule_any = {
         instance = {
@@ -527,7 +566,7 @@ awful.rules.rules = {
           "xtightvncviewer"},
 
         name = {
-          "Event Tester",  -- xev.
+          "Event Tester",  -- xev
         },
         role = {
           "AlarmWindow",  -- Thunderbird's calendar.
