@@ -7,6 +7,7 @@ local naughty = require("naughty")
 local awful = require("awful")
 local gears = require("gears")
 local object = require("gears.object")
+local beautiful = require("beautiful")
 
 function print_r(arr, indentLevel)
   local str = ""
@@ -93,9 +94,22 @@ function add_hover_notification(widget, command)
   widget:connect_signal('mouse::leave', function() hide(self) end)
 end
 
+function set_wallpaper(s)
+    -- Wallpaper
+    if beautiful.wallpaper then
+        local wallpaper = beautiful.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+        gears.wallpaper.maximized(wallpaper, s, true)
+    end
+end
+
 local utilities = {}
 utilities.print_r = print_r
 utilities.run_command = run_command
 utilities.add_hover_notification = add_hover_notification
+utilities.set_wallpaper = set_wallpaper
 
 return utilities

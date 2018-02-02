@@ -8,13 +8,15 @@ local gfs = require("gears.filesystem")
 local themes_path = os.getenv("HOME") .. "/.awesome/themes/"
 local icons_dir = themes_path .. 'adlpz/icons/'
 
+local accent_color = "#2080B9" -- "#0088FF"
+
 local theme = {}
 
 theme.wallpaper = os.getenv("HOME") .."/images/WALLPAPER"
 
 theme.font          = "sans 8"
 
-theme.bg_normal     = "#111111"
+theme.bg_normal     = "#0C0D0E"
 theme.bg_focus      = "#555555"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#777777"
@@ -26,15 +28,15 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = 0
-theme.border_width  = dpi(2)
+theme.border_width  = dpi(1)
 theme.border_normal = "#000000"
-theme.border_focus  = "#0088FF"
+theme.border_focus  = accent_color
 theme.border_marked = "#CC9393"
 
 theme.taglist_fg_focus              = "#FFFFFF"
-theme.taglist_bg_focus              = "#0088FF"
+theme.taglist_bg_focus              = accent_color
 theme.tasklist_fg_focus             = "#FFFFFF"
-theme.tasklist_bg_focus             = "#0088FF"
+theme.tasklist_bg_focus             = accent_color
 
 -- There are other variable sets
 -- overriding the default one when

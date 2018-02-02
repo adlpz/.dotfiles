@@ -1,11 +1,14 @@
 # oh-my-zsh
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-plugins=(ssh-agent)
+plugins=(ssh-agent zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
 CUSTOM_ZSH=$HOME/.zsh
 source $CUSTOM_ZSH/*
+
+# BROWSER
+export BROWSER='/usr/bin/firefox-developer-edition'
 
 # TERM
 export TERM='xterm-256color'
@@ -26,8 +29,8 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
-# Path
-export PATH="/home/user/tools/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/git/bin:/home/user/.gem/ruby/2.2.0/bin:/home/user/tools/android-sdk-linux/platform-tools/"
+# Path and other general variables are sourced from .profile
+source $HOME/.profile
 
 # $EDITOR
 export EDITOR=$(which vim)

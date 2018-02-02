@@ -24,6 +24,10 @@ function refresh_volume ()
     helpers.run_command("~/tools/volumecontrol/volumecontrol.py show-volume", set_volume_text)
 end
 
+function mute ()
+    helpers.run_command("~/tools/volumecontrol/volumecontrol.py mute", set_volume_text)
+end
+
 volwidget:buttons(
    awful.util.table.join(
    awful.button({}, 1, function()
@@ -46,4 +50,6 @@ gears.timer.start_new(5, function()
     return true
 end)
 
-return {widget=volwidget,icon=volicon}
+helpers.add_hover_notification(volwidget, "~/tools/volumecontrol/volumecontrol.py sink")
+
+return {widget=volwidget,icon=volicon,up=volume_up,down=volume_down,mute=mute}
