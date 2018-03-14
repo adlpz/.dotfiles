@@ -26,20 +26,25 @@ local clientkey = addkeyfn(clientkeys)
 
 -- Move through Tags
 
-globalkey({ modkey, "shift" }, "h", awful.tag.viewprev, "Previous tag", "tag")
-globalkey({ modkey, "shift" }, "l", awful.tag.viewnext, "Next tag", "tag")
+globalkey({ modkey, "shift" }, "Left", awful.tag.viewprev, "Previous tag", "tag")
+globalkey({ modkey, "shift" }, "Right", awful.tag.viewnext, "Next tag", "tag")
 globalkey({ modkey, "shift" }, "Escape", awful.tag.history.restore, "Last used tag", "tag")
 
 -- Move through Clients
 
 globalkey({ modkey }, "h", function() awful.client.focus.bydirection("left") end, "Left client", "client")
 globalkey({ modkey }, "j", function() awful.client.focus.bydirection("down") end, "Down client", "client")
-globalkey({ modkey }, "k", function() awful.client.focus.bydirection("top") end, "Top client", "client")
+globalkey({ modkey }, "k", function() awful.client.focus.bydirection("up") end, "Up client", "client")
 globalkey({ modkey }, "l", function() awful.client.focus.bydirection("right") end, "Right client", "client")
 
 globalkey({ modkey }, "Tab", function() awful.client.focus.byidx(1) end, "Cycle client", "client")
 
 globalkey({ modkey }, "u", awful.client.urgent.jumpto, "Urgent client", "client")
+
+-- Move through screens
+
+globalkey({ modkey }, "Down", function() awful.screen.focus_bydirection("right") end, "Right screen", "screen")
+globalkey({ modkey }, "Up", function() awful.screen.focus_bydirection("left") end, "Right screen", "screen")
 
 -- Layout manipulation
 
@@ -53,6 +58,8 @@ globalkey({ modkey, "Shift" }, "k", function() awful.tag.incncol(1, nil, true) e
 globalkey({ modkey, "Shift" }, "j", function() awful.tag.incncol(-1, nil, true) end, "Fewer columns", "layout")
 
 globalkey({ modkey }, "space", function() awful.layout.inc(1) end, "Next layout", "layout")
+
+globalkey({ modkey }, "o", function() awful.client.movetoscreen() end, "Move client to next screen", "layout")
 
 -- Screen manipulation
 
