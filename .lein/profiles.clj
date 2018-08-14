@@ -1,3 +1,3 @@
-{:user {:plugins [[cider/cider-nrepl "0.10.0-SNAPSHOT"]
-                  [refactor-nrepl "1.2.0-SNAPSHOT"]]
-        :dependencies [[org.clojure/tools.namespace "0.2.10"]]}}
+{:user {:plugins [[cider/cider-nrepl "0.16.0"]
+                  [refactor-nrepl "2.3.1"]]
+        :dependencies [[org.clojure/tools.namespace "0.3.0-alpha4"]]}}

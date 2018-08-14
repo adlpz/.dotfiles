@@ -1,11 +1,12 @@
+# Tmux ZSH plugin environment variables
+#ZSH_TMUX_AUTOSTART=true
+
 # oh-my-zsh
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="robbyrussell"
-plugins=(ssh-agent zsh-autosuggestions)
+ZSH_CUSTOM=$HOME/.zsh
+ZSH_THEME="adlpz"
+plugins=(ssh-agent zsh-autosuggestions last-working-dir wd)
 source $ZSH/oh-my-zsh.sh
-
-CUSTOM_ZSH=$HOME/.zsh
-source $CUSTOM_ZSH/*
 
 # BROWSER
 export BROWSER='/usr/bin/firefox-developer-edition'
@@ -19,15 +20,16 @@ _print_zsh_banner
 # Load ZSH colors
 autoload -U colors && colors
 
-# Custom prompt
-PROMPT=$'%{$fg_bold[blue]%}$(parse_git_dirty)$(git_prompt_info)%{$fg_bold[blue]%}%{$fg[white]%}%c%{$fg_bold[cyan]%} %#%{$reset_color%} '
-INITIAL_RPROMPT=$'[%{\e[0;31m%}%n%{\e[0;37m%}@%{\e[0;32m%}%m%{\e[0m%}]'
-RPROMPT=$INITIAL_RPROMPT
 
-ZSH_THEME_GIT_PROMPT_PREFIX=""
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
+# Custom prompt
+#PROMPT=$'%{$fg_bold[blue]%}$(parse_git_dirty)$(git_prompt_info)%{$fg_bold[blue]%}%{$fg[white]%}%c%{$fg_bold[cyan]%} %#%{$reset_color%} '
+#INITIAL_RPROMPT=$'[%{\e[0;31m%}%n%{\e[0;37m%}@%{\e[0;32m%}%m%{\e[0m%}]'
+#RPROMPT=$INITIAL_RPROMPT
+
+#ZSH_THEME_GIT_PROMPT_PREFIX=""
+#ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
+#ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}"
+#ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 # Path and other general variables are sourced from .profile
 source $HOME/.profile
@@ -54,6 +56,9 @@ function zle-line-init zle-keymap-select {
 zle -N zle-line-init
 zle -N zle-keymap-select
 
+# Extra keys
+bindkey '^H' backward-kill-word # CTRL+Backspace delete word
+
 # Homebrew
 export HOMEBREW_GITHUB_API_TOKEN="6d172fc6b90506f5e375654e21aa7482e685f46b"
 
@@ -71,6 +76,7 @@ alias ls='ls -G --color=auto'
 alias l='ls -l'
 alias v="vagrant"
 alias vssh="vagrant_up_and_ssh"
+alias did="vim +'normal Go' +'r!date' ~/did.txt"
 
 # History
 HISTFILE=~/.zsh_history
