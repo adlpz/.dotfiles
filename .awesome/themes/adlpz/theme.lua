@@ -52,7 +52,7 @@ theme.tasklist_bg_focus             = accent_color
 --theme.taglist_bg_focus = "#ff0000"
 
 -- Generate taglist squares:
-local taglist_square_size = dpi(4)
+local taglist_square_size = dpi(3)
 theme.taglist_squares_sel = theme_assets.taglist_squares_sel(
     taglist_square_size, theme.fg_normal
 )
@@ -130,9 +130,11 @@ theme.awesome_icon = theme_assets.awesome_icon(
 
 -- Icons ported from the Powerline Dark theme
 theme.widget_ac                     = icons_dir .. "ac.png"
+theme.widget_battery_charging                = icons_dir .. "battery_charging.png"
+theme.widget_battery_full                = icons_dir .. "battery_full.png"
 theme.widget_battery                = icons_dir .. "battery.png"
 theme.widget_battery_low            = icons_dir .. "battery_low.png"
-theme.widget_battery_empty          = icons_dir .. "battery_empty.png"
+theme.widget_battery_critical          = icons_dir .. "battery_critical.png"
 theme.widget_mem                    = icons_dir .. "mem.png"
 theme.widget_cpu                    = icons_dir .. "cpu.png"
 theme.widget_temp                   = icons_dir .. "temp.png"

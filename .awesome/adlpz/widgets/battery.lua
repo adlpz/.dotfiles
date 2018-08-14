@@ -12,23 +12,51 @@ function batreader (value)
   handle:close()
   return result:gsub("^%s*(.-)%s*$", "%1")
 end
+
+function get_baticon_image (sign, charge)
+    if (sign == "+") then
+        return beautiful.widget_battery_charging
+    end
+
+    if charge >= 90 then
+        return beautiful.widget_battery_full
+    end
+
+    if charge >= 60 then
+        return beautiful.widget_battery
+    end
+
+    if charge >= 20 then
+        return beautiful.widget_battery_low
+    end
+
+    return beautiful.widget_battery_critical
+end
+
 function update_batwidget ()
   local charge = batreader("charge")
   charge = tonumber(charge)
+  local charge_str = ""
   if (charge >= 100) then
-    charge = string.format("%5.1f", charge) .. "%"
+    charge_str = string.format("%5.1f", charge) .. "%"
   else
-    charge = string.format("%5.2f", charge) .. "%"
+    charge_str = string.format("%5.2f", charge) .. "%"
   end
   local power = batreader("power")
   power = string.format("%05.2f", tonumber(power))
   local status = batreader("status")
   local sign = (status == "Discharging") and "-" or "+"
-  local string = charge .. " " .. sign ..  power .. "W "
+  local string = charge_str .. " " .. sign ..  power .. "W "
   batwidget:set_text(string)
+  local new_image = get_baticon_image(sign, charge)
+  if (new_image ~= baticon_image) then
+      baticon_image = new_image
+      baticon.image = baticon_image
+  end
 end
 
-baticon = wibox.widget.imagebox(beautiful.widget_battery)
+baticon_image = beautiful.widget_battery
+baticon = wibox.widget.imagebox(baticon_image)
 batwidget = wibox.widget.textbox()
 battimer = gears.timer({ timeout = 5 })
 battimer:connect_signal("timeout", update_batwidget)

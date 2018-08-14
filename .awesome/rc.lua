@@ -207,7 +207,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1 Web", "2 Code", "3 T1", "4 T2", "5 Comm", "6", "7", "8", "9 Music" }, s, awful.layout.layouts[1])
+    awful.tag({ "1 W", "2 C1", "3 C2", "4 C3", "5 T1", "6 T2", "7 T3", "8", "9", "0", "Comm", "Music" }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -225,7 +225,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create a tasklist widget
     s.mytasklist = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, tasklist_buttons)
 
-    -- Create the wiboxhttps://news.ycombinator.com/news?p=2
+    -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
     -- Add widgets to the wibox
@@ -233,7 +233,6 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -264,6 +263,7 @@ awful.screen.connect_for_each_screen(function(s)
             w_clock.widget,
             wibox.widget.textbox(" "),
             s.mylayoutbox,
+            mylauncher,
         },
     }
 end)
