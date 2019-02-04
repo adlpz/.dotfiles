@@ -2,6 +2,7 @@
 
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
+local gears = require("gears")
 local dpi = xresources.apply_dpi
 
 local gfs = require("gears.filesystem")
@@ -9,18 +10,29 @@ local themes_path = os.getenv("HOME") .. "/.awesome/themes/"
 local icons_dir = themes_path .. 'adlpz/icons/'
 
 local accent_color = "#2080B9" -- "#0088FF"
+local accent_bg = gears.color({
+    type = "linear",
+    from = { 0, 0 },
+    to = { 0, 30 },
+    stops = { {0, "#2080B9"}, {1, "#0088FF"} }
+})
 
 local theme = {}
 
 theme.wallpaper = os.getenv("HOME") .."/images/WALLPAPER"
 
-theme.font          = "sans 8"
+theme.font          = "Roboto Bold 8"
 
-theme.bg_normal     = "#0C0D0E"
+theme.bg_normal     =  gears.color({
+    type  = "linear",
+    from  = { 0, 0 },
+    to    = { 0, 30 },
+    stops = { {0, "#222"}, {1, "#0C0D0E"} }
+}) -- "#0C0D0E"
 theme.bg_focus      = "#555555"
 theme.bg_urgent     = "#ff0000"
 theme.bg_minimize   = "#777777"
-theme.bg_systray    = theme.bg_normal
+theme.bg_systray    = "#000"
 
 theme.fg_normal     = "#aaaaaa"
 theme.fg_focus      = "#C6E3F7"
@@ -34,9 +46,9 @@ theme.border_focus  = accent_color
 theme.border_marked = "#CC9393"
 
 theme.taglist_fg_focus              = "#FFFFFF"
-theme.taglist_bg_focus              = accent_color
+theme.taglist_bg_focus              = accent_bg
 theme.tasklist_fg_focus             = "#FFFFFF"
-theme.tasklist_bg_focus             = accent_color
+theme.tasklist_bg_focus             = accent_bg
 
 -- There are other variable sets
 -- overriding the default one when

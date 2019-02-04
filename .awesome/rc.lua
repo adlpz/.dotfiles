@@ -31,14 +31,14 @@ beautiful.init(gears.filesystem.get_dir("config") .. "themes/adlpz/theme.lua")
 -----------------------------------------------------------------------------
 
 local w_memory = require("adlpz.widgets.memory")
-local w_backlight = require("adlpz.widgets.backlight")
-local w_battery = require("adlpz.widgets.battery")
+-- local w_backlight = require("adlpz.widgets.backlight")
+-- local w_battery = require("adlpz.widgets.battery")
 local w_caffeine = require("adlpz.widgets.caffeine")
 local w_clock = require("adlpz.widgets.clock")
 local w_cpu = require("adlpz.widgets.cpu")
 local w_fs = require("adlpz.widgets.fs")
 local w_keymap = require("adlpz.widgets.keymap")
-local w_net = require("adlpz.widgets.net")
+-- local w_net = require("adlpz.widgets.net")
 local w_volume = require("adlpz.widgets.volume")
 
 -----------------------------------------------------------------------------
@@ -240,8 +240,8 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
-            w_net.icon,
-            w_net.widget,
+            -- w_net.icon,
+            -- w_net.widget,
             w_memory.icon,
             w_memory.widget,
             w_cpu.icon,
@@ -249,12 +249,12 @@ awful.screen.connect_for_each_screen(function(s)
             -- The FS widget fails due to a bug in Lain (lain/widget/fs.lua)
             -- w_fs.icon,
             -- w_fs.widget,
-            w_battery.icon,
-            w_battery.widget,
+            -- w_battery.icon,
+            -- w_battery.widget,
             w_volume.icon,
             w_volume.widget,
-            w_backlight.icon,
-            w_backlight.widget,
+            -- w_backlight.icon,
+            -- w_backlight.widget,
             w_caffeine.icon,
             w_caffeine.widget,
             w_keymap.icon,
