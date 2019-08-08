@@ -78,8 +78,6 @@ vagrant_up_and_ssh() {
 # Aliases
 alias ls='ls -G --color=auto'
 alias l='ls -lah'
-alias v="vagrant"
-alias vssh="vagrant_up_and_ssh"
 alias did="vim +'normal Go' +'r!date' ~/did.txt"
 alias xclip="xclip -selection c"
 alias gs='git status'
@@ -87,6 +85,12 @@ alias gc='git commit'
 alias gl='git log'
 alias gd='git diff'
 alias gds='git diff --staged'
+alias gls="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias gll="gls -p"
+
+# Project-specific aliases
+alias crmassets='pushd ~/work/ydevs/ganaenergia/crm/design/web/js/pages/gamma_facturacion && yarn build --prod && popd'
+alias crmsync='git checkout nueva-facturacion && git pull origin nueva-facturacion --ff-only && git pull && git push'
 
 # History
 HISTFILE=~/.zsh_history
@@ -142,6 +146,11 @@ zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/s
 c () {
     echo "$@" | bc -l
 }
+
+# NPM
+# Note: set global path with:
+# npm config set prefix '~/.npm-global'
+PATH=$PATH:~/.npm-global/bin
 
 # Go
 export GOROOT=/usr/lib/go

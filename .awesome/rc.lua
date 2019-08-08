@@ -134,7 +134,8 @@ screensmenu = {
 
 tasksmenu = {
   {"kill spotify", function() helpers.run_command("killall -TERM spotify") end},
-  {"bluetooth", terminal .. " -e bluetoothctl"}
+  {"bluetooth", terminal .. " -e bluetoothctl"},
+  {"kill pulseaudio", function() helpers.run_command("pkill pulseaudio") end}
 }
 
 awesomemenu = {

@@ -29,15 +29,15 @@ theme.bg_normal     =  gears.color({
     to    = { 0, 30 },
     stops = { {0, "#222"}, {1, "#0C0D0E"} }
 }) -- "#0C0D0E"
-theme.bg_focus      = "#555555"
+theme.bg_focus      = theme.bg_normal --"#555555"
 theme.bg_urgent     = "#ff0000"
-theme.bg_minimize   = "#777777"
-theme.bg_systray    = "#000"
+theme.bg_minimize   = theme.bg_normal -- "#777777"
+theme.bg_systray    = "#111111"
 
 theme.fg_normal     = "#aaaaaa"
 theme.fg_focus      = "#C6E3F7"
 theme.fg_urgent     = "#ffffff"
-theme.fg_minimize   = "#ffffff"
+theme.fg_minimize   = "#777777"
 
 theme.useless_gap   = 0
 theme.border_width  = dpi(1)
