@@ -5,7 +5,7 @@
 ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.zsh
 ZSH_THEME="adlpz"
-plugins=(ssh-agent zsh-autosuggestions last-working-dir wd)
+plugins=(ssh-agent zsh-autosuggestions last-working-dir wd history-substring-search z fzf-z)
 source $ZSH/oh-my-zsh.sh
 
 # BROWSER
@@ -59,6 +59,10 @@ zle -N zle-keymap-select
 # Extra keys
 bindkey '^H' backward-kill-word # CTRL+Backspace delete word
 
+# History substring search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
 # Homebrew
 export HOMEBREW_GITHUB_API_TOKEN="6d172fc6b90506f5e375654e21aa7482e685f46b"
 
@@ -73,15 +77,21 @@ vagrant_up_and_ssh() {
 
 # Aliases
 alias ls='ls -G --color=auto'
-alias l='ls -l'
+alias l='ls -lah'
 alias v="vagrant"
 alias vssh="vagrant_up_and_ssh"
 alias did="vim +'normal Go' +'r!date' ~/did.txt"
+alias xclip="xclip -selection c"
+alias gs='git status'
+alias gc='git commit'
+alias gl='git log'
+alias gd='git diff'
+alias gds='git diff --staged'
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=1000000
+SAVEHIST=1000000
 setopt appendhistory autocd extendedglob
 
 # keys
@@ -140,7 +150,7 @@ export GOPATH=$HOME/golang
 export PATH=$PATH:$GOBIN
 
 # Ruby
-RUBYPATH=$HOME/.gem/ruby/2.4.0/bin
+RUBYPATH=$HOME/.gem/ruby/2.4.0/bin:$HOME/.gem/ruby/2.5.0/bin
 export PATH=$PATH:$RUBYPATH
 
 # NPM and others

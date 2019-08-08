@@ -49,8 +49,8 @@ color7  = #b7b8b9
 color15 = #fcfdfe
 
 # Red
-color1  = #e31a1c
-color9  = #e31a1c
+color1  = #A40000
+color9  = #A40000
 
 # Green
 color2  = #31a354
