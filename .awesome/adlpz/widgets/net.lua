@@ -11,15 +11,24 @@ markup = lain.util.markup
 terminal = "urxvt"
 iptraf = terminal .. " -g 180x54-20+34 -e sudo iptraf-ng -i all "
 
+function format (bytes)
+    bytes = tonumber(bytes)
+    if bytes > 1024 then
+        return string.format("%6.2f", bytes / 1024) .. "MB/s"
+    else
+        return string.format("%6.2f", bytes) .. "KB/s"
+    end
+end
+
 
 neticon = wibox.widget.imagebox(beautiful.widget_net)
 network = "LOADING"
 netwidget = lain.widget.net({
     settings = function()
       widget:set_markup(network ..
-                          markup("#7AC82E", " " .. string.format("%6.1f", net_now.received)) .. 
+                          markup("#7AC82E", " " .. format(net_now.received)) ..
                           " " ..
-                          markup("#46A8C3", " " .. string.format("%6.1f", net_now.sent) .. " "))
+                          markup("#46A8C3", " " .. format(net_now.sent) .. " "))
     end
 })
 

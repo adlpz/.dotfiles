@@ -37,7 +37,7 @@ globalkey({ modkey }, "j", function() awful.client.focus.bydirection("down") end
 globalkey({ modkey }, "k", function() awful.client.focus.bydirection("up") end, "Up client", "client")
 globalkey({ modkey }, "l", function() awful.client.focus.bydirection("right") end, "Right client", "client")
 
-globalkey({ modkey }, "Tab", function() awful.client.focus.byidx(1) end, "Cycle client", "client")
+globalkey({ modkey }, "Tab", function() awful.spawn("rofi -show window -kb-row-down 'Super_L+Tab' -kb-accept-entry '!Super_L+Tab,Return'") end, "Cycle client", "client")
 
 globalkey({ modkey }, "u", awful.client.urgent.jumpto, "Urgent client", "client")
 
@@ -80,7 +80,7 @@ globalkey({ modkey }, "x", function ()
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end, "Execute Lua", "launcher")
-globalkey({ modkey }, "p", function() awful.spawn("rofi -combi-modi window,drun,run,ssh -show combi") end, "Menu Bar", "launcher")
+globalkey({ modkey }, "p", function() awful.spawn("rofi -combi-modi drun,run,ssh -show combi") end, "Menu Bar", "launcher")
 
 -- Control AwesomeWM
 

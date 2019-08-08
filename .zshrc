@@ -143,3 +143,6 @@ export PATH=$PATH:$GOBIN
 RUBYPATH=$HOME/.gem/ruby/2.4.0/bin
 export PATH=$PATH:$RUBYPATH
 
+# NPM and others
+export PATH=$PATH:$HOME/.local/bin
+
