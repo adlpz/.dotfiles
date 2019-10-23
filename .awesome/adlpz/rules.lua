@@ -19,7 +19,7 @@ awful.rules.rules = {
     -- Apps that run centered and floating
     { rule_any = {
         class = {"Cerebro"},
-        name = {"volumecontrol.py", "bluetoothctl"}
+        name = {"volumecontrol.py", "bluetoothctl", "notational-velocity"}
     }, properties = { floating = true,
                       maximized = false,
                       maximized_vertical = false,
