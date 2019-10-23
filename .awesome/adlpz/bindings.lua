@@ -68,6 +68,7 @@ globalkey({ modkey, "Control" }, "p", function() awful.util.spawn_with_shell("~/
 -- Applications and Menus
 
 globalkey({ modkey }, "Return", function() awful.spawn(terminal) end, "Terminal", "applications")
+globalkey({ modkey }, "g", function() awful.spawn("chromium") end, "Terminal", "applications")
 
 -- Prompt and Launcher
 
