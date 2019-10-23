@@ -12,6 +12,10 @@ call vundle#begin()
     Plugin 'tpope/vim-fireplace'
     Plugin 'terryma/vim-multiple-cursors'
     Plugin 'ardagnir/vimbed'
+    Plugin 'junegunn/fzf'
+    Plugin 'alok/notational-fzf-vim'
+    Plugin 'godlygeek/tabular'
+    Plugin 'plasticboy/vim-markdown'
 call vundle#end()
 filetype plugin indent on
 
@@ -170,3 +174,7 @@ endif
 
 " Allow hidden files (unsaved buffers in the background)
 set hidden
+
+" Settings for notational-fzf-vim
+let g:nv_search_paths = ['~/notes', '~/docs']
+let g:nv_create_note_window = 'e'

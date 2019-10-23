@@ -69,6 +69,7 @@ globalkey({ modkey, "Control" }, "p", function() awful.util.spawn_with_shell("~/
 
 globalkey({ modkey }, "Return", function() awful.spawn(terminal) end, "Terminal", "applications")
 globalkey({ modkey }, "g", function() awful.spawn("chromium") end, "Terminal", "applications")
+globalkey({ modkey }, "/", function() awful.util.spawn_with_shell(terminal .. " -t notational-velocity -e 'vim +NV!'") end, "NV", "applications")
 
 -- Prompt and Launcher
 
@@ -82,6 +83,7 @@ globalkey({ modkey }, "x", function ()
                   }
               end, "Execute Lua", "launcher")
 globalkey({ modkey }, "p", function() awful.spawn("rofi -combi-modi drun,run,ssh -show combi") end, "Menu Bar", "launcher")
+globalkey({ modkey }, "n", function() awful.util.spawn_with_shell("kill -USR1 $(pidof deadd-notification-center)") end, "Notification Center", "launcher")
 
 -- Control AwesomeWM
 
@@ -96,6 +98,7 @@ globalkey({ modkey, "Control" }, "v", function() awful.spawn("volumecontrol") en
 globalkey({ modkey, "Control" }, "b", function() awful.util.spawn_with_shell(terminal .. " -e bluetoothctl") end, "Bluetooth Control UI", "system")
 globalkey({ modkey, "Control" }, "s", function() awful.spawn("keeweb") end, "KeePass UI", "system")
 globalkey({ modkey, "Control" }, "f", function() awful.spawn("nemo") end, "NEMO File Manager", "system")
+
 
 -- Media Keys
 
@@ -113,7 +116,6 @@ globalkey({}, "#123", w_volume.up, "Volume Up", "media") -- Vol Up
 clientkey({ modkey }, "f", function(c) c.fullscreen = not c.fullscreen; c:raise() end, "Fullscreen", "client")
 clientkey({ modkey }, "d", function(c) c.floating = not c.floating  end, "Detach (Float)", "client")
 clientkey({ modkey }, "m", function(c) c.maximized = not c.maximized end, "Maximized", "client")
-clientkey({ modkey }, "n", function(c) c.minimized = true end, "Minimize", "client")
 clientkey({ modkey }, "q", function(c) c:kill() end, "Close", "client")
 clientkey({ modkey }, "c", function (c)
         c.maximized = false
