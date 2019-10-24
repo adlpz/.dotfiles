@@ -31,8 +31,6 @@ beautiful.init(gears.filesystem.get_dir("config") .. "themes/adlpz/theme.lua")
 -----------------------------------------------------------------------------
 
 local w_memory = require("adlpz.widgets.memory")
-local w_backlight = require("adlpz.widgets.backlight")
-local w_battery = require("adlpz.widgets.battery")
 -- local w_caffeine = require("adlpz.widgets.caffeine")
 local w_clock = require("adlpz.widgets.clock")
 local w_cpu = require("adlpz.widgets.cpu")
@@ -243,6 +241,8 @@ awful.screen.connect_for_each_screen(function(s)
     }
 
     if (helpers.is_traveler) then
+        local w_backlight = require("adlpz.widgets.backlight")
+        local w_battery = require("adlpz.widgets.battery")
         helpers.add_to_table(s.right, {
 	        w_battery.icon,
 	        w_battery.widget,
