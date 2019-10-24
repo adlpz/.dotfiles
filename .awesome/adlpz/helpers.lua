@@ -8,6 +8,7 @@ local awful = require("awful")
 local gears = require("gears")
 local object = require("gears.object")
 local beautiful = require("beautiful")
+local socket = require("socket")
 
 function print_r(arr, indentLevel)
   local str = ""
@@ -106,10 +107,28 @@ function set_wallpaper(s)
     end
 end
 
+function get_hostname()
+    return socket.dns.gethostname()
+end
+
+local hostname = get_hostname()
+local is_traveler = hostname == "traveler"
+local is_barbacode = hostname == "barbacode.prealfa.com"
+
+function add_to_table(t, elements)
+	for _, v in pairs(elements) do
+		table.insert(t, v)
+	end
+end
+
 local utilities = {}
 utilities.print_r = print_r
 utilities.run_command = run_command
 utilities.add_hover_notification = add_hover_notification
 utilities.set_wallpaper = set_wallpaper
+utilities.hostname = hostname
+utilities.is_traveler = is_traveler
+utilities.is_barbacode = is_barbacode
+utilities.add_to_table = add_to_table
 
 return utilities

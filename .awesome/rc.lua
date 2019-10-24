@@ -31,14 +31,14 @@ beautiful.init(gears.filesystem.get_dir("config") .. "themes/adlpz/theme.lua")
 -----------------------------------------------------------------------------
 
 local w_memory = require("adlpz.widgets.memory")
--- local w_backlight = require("adlpz.widgets.backlight")
--- local w_battery = require("adlpz.widgets.battery")
-local w_caffeine = require("adlpz.widgets.caffeine")
+local w_backlight = require("adlpz.widgets.backlight")
+local w_battery = require("adlpz.widgets.battery")
+-- local w_caffeine = require("adlpz.widgets.caffeine")
 local w_clock = require("adlpz.widgets.clock")
 local w_cpu = require("adlpz.widgets.cpu")
-local w_fs = require("adlpz.widgets.fs")
+-- local w_fs = require("adlpz.widgets.fs")
 local w_keymap = require("adlpz.widgets.keymap")
--- local w_net = require("adlpz.widgets.net")
+local w_net = require("adlpz.widgets.net")
 local w_volume = require("adlpz.widgets.volume")
 
 -----------------------------------------------------------------------------
@@ -46,6 +46,7 @@ local w_volume = require("adlpz.widgets.volume")
 -----------------------------------------------------------------------------
 
 local helpers = require("adlpz.helpers")
+local _ = require("adlpz.lodash")
 
 -----------------------------------------------------------------------------
 -- Error Handling
@@ -229,6 +230,39 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
+    -- Define right widgets
+    s.right = {
+            layout = wibox.layout.fixed.horizontal,
+            wibox.widget.systray(),
+            w_net.icon,
+            w_net.widget,
+            w_memory.icon,
+            w_memory.widget,
+            w_cpu.icon,
+            w_cpu.widget,
+    }
+
+    if (helpers.is_traveler) then
+        helpers.add_to_table(s.right, {
+	        w_battery.icon,
+	        w_battery.widget,
+	        w_backlight.icon,
+	        w_backlight.widget,
+        })
+    end
+
+    helpers.add_to_table(s.right, {
+        w_volume.icon,
+        w_volume.widget,
+        w_keymap.icon,
+        w_keymap.widget,
+        w_clock.icon,
+        w_clock.widget,
+        wibox.widget.textbox(" "),
+        s.mylayoutbox,
+        mylauncher,
+    })
+
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -238,34 +272,7 @@ awful.screen.connect_for_each_screen(function(s)
             s.mypromptbox,
         },
         s.mytasklist, -- Middle widget
-        { -- Right widgets
-            layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
-            -- w_net.icon,
-            -- w_net.widget,
-            w_memory.icon,
-            w_memory.widget,
-            w_cpu.icon,
-            w_cpu.widget,
-            -- The FS widget fails due to a bug in Lain (lain/widget/fs.lua)
-            -- w_fs.icon,
-            -- w_fs.widget,
-            -- w_battery.icon,
-            -- w_battery.widget,
-            w_volume.icon,
-            w_volume.widget,
-            -- w_backlight.icon,
-            -- w_backlight.widget,
-            w_caffeine.icon,
-            w_caffeine.widget,
-            w_keymap.icon,
-            w_keymap.widget,
-            w_clock.icon,
-            w_clock.widget,
-            wibox.widget.textbox(" "),
-            s.mylayoutbox,
-            mylauncher,
-        },
+		s.right -- Right widgets,
     }
 end)
 
