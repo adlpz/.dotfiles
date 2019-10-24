@@ -87,6 +87,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gls="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias gll="gls -p"
+alias nv="vim +NV"
 
 # Project-specific aliases
 alias crmassets='pushd ~/work/ydevs/ganaenergia/crm/design/web/js/pages/gamma_facturacion && yarn build --prod && popd'
