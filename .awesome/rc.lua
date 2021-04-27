@@ -16,7 +16,9 @@ local wibox = require("wibox")
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
+-- local _dbus = dbus; dbus = nil
 local naughty = require("naughty")
+-- dbus = _dbus
 -- Enable VIM help for hotkeys widget when client with matching name is opened:
 require("awful.hotkeys_popup.keys.vim")
 

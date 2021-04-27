@@ -159,6 +159,10 @@ export GOBIN=$GOROOT/bin
 export GOPATH=$HOME/golang
 export PATH=$PATH:$GOBIN
 
+# Android
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/29.0.3
+
 # Ruby
 RUBYPATH=$HOME/.gem/ruby/2.4.0/bin:$HOME/.gem/ruby/2.5.0/bin
 export PATH=$PATH:$RUBYPATH
@@ -166,3 +170,8 @@ export PATH=$PATH:$RUBYPATH
 # NPM and others
 export PATH=$PATH:$HOME/.local/bin
 
+# Symfony
+PATH="$HOME/.symfony/bin:$PATH"
+
+
+source /home/user/.config/broot/launcher/bash/br

@@ -2,3 +2,4 @@
 .vim/bundle/*/*
 !.vim/bundle/Vundle.vim
 .lein/self-installs
+.vim/bundle
